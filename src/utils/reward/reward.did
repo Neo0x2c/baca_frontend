@@ -1,0 +1,55 @@
+type TxReceipt = 
+ variant {
+   err: variant {
+          InsufficientAllowance;
+          InsufficientBalance;
+          Unauthorized;
+        };
+   ok: nat;
+ };
+type Time = int;
+type RewardType = 
+ variant {
+   InviteReward;
+   ReadReward;
+ };
+type RewardReturnResultType = 
+ variant {
+   CollectTooFrequent;
+   InsufficientPersonalBudget;
+   InsufficientTotalBudget;
+   Success;
+   TransferFailed;
+ };
+type RewardReturn = 
+ record {
+   msg: RewardReturnResultType;
+   rewardLeft: nat;
+   statusCode: nat;
+ };
+type RewardHistory = 
+ record {
+   ammount: nat;
+   caller: principal;
+   result: RewardReturnResultType;
+   rewardType: RewardType;
+   time: Time;
+ };
+type Reward = 
+ service {
+   checkRewardLeft: (principal) -> (int) query;
+   collectReadReward: () -> (RewardReturn);
+   getGapRewardLimitSeconds: () -> (int) query;
+   getLatestRewardHistory: (principal, nat) -> (vec RewardHistory) query;
+   getPersonalRewardLimit: () -> (nat) query;
+   getReadRewardAmmount: () -> (nat) query;
+   getTotalDailyRewardLimit: () -> (nat) query;
+   resetTodaysRewardRecord: () -> (int);
+   setGapRewardLimitSeconds: (int) -> () oneway;
+   setOwner: (principal) -> () oneway;
+   setPersonalRewardLimit: (nat) -> () oneway;
+   setReadReward: (nat) -> () oneway;
+   setTotalDailyRewardLimit: (nat) -> () oneway;
+   transferToAdmin: (nat) -> (TxReceipt);
+ };
+service : (principal) -> Reward
