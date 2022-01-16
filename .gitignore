@@ -1,3 +1,6 @@
+# local canister ids
+canister_ids.json
+
 # Logs
 logs
 *.log
