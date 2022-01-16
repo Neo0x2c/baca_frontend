@@ -4,7 +4,7 @@ import { Actor, HttpAgent } from "@dfinity/agent";
 import { idlFactory } from './reward.did.js';
 export { idlFactory } from './reward.did.js';
 // CANISTER_ID is replaced by webpack based on node environment
-export const canisterId = process.env.REWARD_CANISTER_ID;
+export const canisterId = process.env.VUE_APP_REWARD_CANISTER_ID;
 
 /**
  * 
@@ -12,12 +12,12 @@ export const canisterId = process.env.REWARD_CANISTER_ID;
  * @param {{agentOptions?: import("@dfinity/agent").HttpAgentOptions; actorOptions?: import("@dfinity/agent").ActorConfig}} [options]
  * @return {import("@dfinity/agent").ActorSubclass<import("./reward.did.js")._SERVICE>}
  */
- export const createActor = (canisterId, options) => {
+export const createActor = (canisterId, options) => {
   const agent = new HttpAgent({ ...options?.agentOptions });
-  
+
   // Fetch root key for certificate validation during development
-  if(process.env.NODE_ENV !== "production") {
-    agent.fetchRootKey().catch(err=>{
+  if (process.env.NODE_ENV !== "production") {
+    agent.fetchRootKey().catch(err => {
       console.warn("Unable to fetch root key. Check to ensure that your local replica is running");
       console.error(err);
     });
@@ -30,9 +30,9 @@ export const canisterId = process.env.REWARD_CANISTER_ID;
     ...options?.actorOptions,
   });
 };
-  
+
 /**
  * A ready-to-use agent for the reward canister
  * @type {import("@dfinity/agent").ActorSubclass<import("./reward.did.js")._SERVICE>}
  */
- export const reward = createActor(canisterId);
+export const reward = createActor(canisterId, { agentOptions: { host: "http://localhost:8000" } });

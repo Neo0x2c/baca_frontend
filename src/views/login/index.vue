@@ -106,8 +106,12 @@
       <h3>Login with Internet Identity</h3>
       <div v-if="authClient.state.isAuthenticated">
         You are LoggedIn! <br />
-        Principal: {{ authClient.state.principal }}
+        Principal: {{ authClient.state.principal }} <br />
+        Your BAT balance: {{ authClient.state.balance }}
         <div><el-button @click="iiLogout()">logout </el-button></div>
+        <div>
+          <el-button @click="collectReward()">collectReward </el-button>
+        </div>
       </div>
       <div v-else>
         <div class="btns">
@@ -247,7 +251,11 @@ export default {
     },
 
     async iiLogout() {
-      await this.authClient.logout();
+      await this.authClient.logout(this.authClient.state);
+    },
+
+    async collectReward() {
+      await this.authClient.collectReward(this.authClient.state);
     },
 
     ToRegister() {
