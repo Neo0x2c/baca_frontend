@@ -1,34 +1,33 @@
 /* eslint-disable no-undef */
 //import { ActorSubclass, Identity } from "@dfinity/agent";
 import { AuthClient } from "@dfinity/auth-client";
-import { clear } from "local-storage"; 
-import { createActor as dip20CreateActor, canisterId as dip20CanisterId } from "@/utils/dip20"; 
+import { clear } from "local-storage";
+import { createActor as dip20CreateActor, canisterId as dip20CanisterId } from "./dip20";
 
-export function useAuthClient () {
+export function useAuthClient() {
+
   var authClient = null;
+  var state = {
+    isAuthenticated: false,
+    principal: "",
+  };
   var myactor = null;
-  var isAuthenticated = false;
-  var principal = false;
-
-  //const [authClient, setAuthClient] = useState(null);
-  //const [actor, setActor] = useState(null);
-  //const [isAuthenticated, setIsAuthenticated] = useState(false);
-  //const [principal, setPrincipal] = useState(false);
 
   const days = BigInt(1);
   const hours = BigInt(24);
   const nanoseconds = BigInt(3600000000000);
+  const local_II_url = "http://qjdve-lqaaa-aaaaa-aaaeq-cai.localhost:8000/#authorize";
 
-  const login = () => {
+  const login = (state) => {
     authClient?.login({
-      identityProvider: process.env.DFX_NETWORK === "ic"
-        ? "https://identity.ic0.app/#authorize"
-        : process.env.LOCAL_II_CANISTER,
+      // identityProvider: process.env.DFX_NETWORK === "ic"
+      //   ? "https://identity.ic0.app/#authorize"
+      //   : process.env.LOCAL_II_CANISTER,
       // identityProvider: "https://identity.ic0.app/#authorize",
+      identityProvider: local_II_url,
       onSuccess: () => {
         initActor();
-        isAuthenticated = true;
-        //setIsAuthenticated(true);
+        state.isAuthenticated = true;
       },
       maxTimeToLive: days * hours * nanoseconds,
     });
@@ -46,33 +45,23 @@ export function useAuthClient () {
 
   const logout = async () => {
     clear();
-    isAuthenticated = false;
-    //setIsAuthenticated(false);
+    state.isAuthenticated = false;
     myactor = undefined
-    //setActor(undefined);
     await authClient?.logout();
-    console.alert("You have logged out!");
   };
 
-  AuthClient.create().then(async (client1) => {
-    const isAuthenticated1 = await client1.isAuthenticated();
-    authClient = client1;
-    isAuthenticated = isAuthenticated1;
-    principal = client1.getIdentity().getPrincipal().toText()
-
+  AuthClient.create().then(async (client) => {
+    const isAuthenticated1 = await client.isAuthenticated();
+    authClient = client;
+    state.isAuthenticated = isAuthenticated1;
+    state.principal = client.getIdentity().getPrincipal().toText()
   })
 
-  if (isAuthenticated) initActor();
+  if (state.isAuthenticated) initActor();
 
   return {
-    authClient,
-    isAuthenticated,
+    state,
     login,
     logout,
-    myactor,
-    principal,
   };
 }
-
-
-

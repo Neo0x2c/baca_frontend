@@ -1,82 +1,119 @@
 <template>
   <div class="login">
-
-    <div class="login-wrap"
-         v-show="showLogin">
-      <h3>登录</h3>
-      <p v-show="showTishi">{{tishi}}</p>
-      <el-form :model="loginForm"
-               status-icon
-               ref="loginForm"
-               label-width="30%"
-               class="demo-ruleForm">
-        <el-form-item prop="email"
-                      label="邮箱"
-                      :rules="[
-      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-      { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
-    ]">
+    <div class="login-wrap" v-show="showLogin">
+      <h3>Login</h3>
+      <p v-show="showTishi">{{ tishi }}</p>
+      <el-form
+        :model="loginForm"
+        status-icon
+        ref="loginForm"
+        label-width="30%"
+        class="demo-ruleForm"
+      >
+        <el-form-item
+          prop="email"
+          label="Email"
+          :rules="[
+            { required: true, message: 'Email is required', trigger: 'blur' },
+            {
+              type: 'email',
+              message: 'Email is invalid',
+              trigger: ['blur', 'change'],
+            },
+          ]"
+        >
           <el-input v-model="loginForm.email"></el-input>
         </el-form-item>
-        <el-form-item label="密码"
-                      prop="pass"
-                      :rules="[ { required: true, message: '请输入密码', trigger: 'blur' } , ]">
-          <el-input type="password"
-                    v-model="loginForm.password"
-                    autocomplete="off"></el-input>
+        <el-form-item
+          label="Password"
+          prop="pass"
+          :rules="[
+            {
+              required: true,
+              message: 'Password is required',
+              trigger: 'blur',
+            },
+          ]"
+        >
+          <el-input
+            type="password"
+            v-model="loginForm.password"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-        <div class='btns'>
-
-          <el-button type="primary"
-                     @click="submitForm('ruleForm')">提交</el-button>
-          <el-button @click="resetForm('loginForm')">重置</el-button>
+        <div class="btns">
+          <el-button type="primary" @click="submitForm('ruleForm')"
+            >Login</el-button
+          >
+          <!-- <el-button @click="resetForm('loginForm')">重置</el-button> -->
         </div>
-
       </el-form>
-      <span v-on:click="ToRegister">没有账号？马上注册</span>
+      <span v-on:click="ToRegister">Register for a new account</span>
     </div>
 
-    <div class="register-wrap"
-         v-show="showRegister">
-      <h3>注册</h3>
-      <p v-show="showTishi">{{tishi}}</p>
-      <el-form :model="registerForm"
-               status-icon
-               ref="registerForm"
-               label-width="30%"
-               class="demo-ruleForm">
-        <el-form-item prop="email"
-                      label="邮箱"
-                      :rules="[
-      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-      { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
-    ]">
+    <div class="register-wrap" v-show="showRegister">
+      <h3>Register</h3>
+      <p v-show="showTishi">{{ tishi }}</p>
+      <el-form
+        :model="registerForm"
+        status-icon
+        ref="registerForm"
+        label-width="30%"
+        class="demo-ruleForm"
+      >
+        <el-form-item
+          prop="email"
+          label="Email"
+          :rules="[
+            { required: true, message: 'Email is required', trigger: 'blur' },
+            {
+              type: 'email',
+              message: 'Invalid Email',
+              trigger: ['blur', 'change'],
+            },
+          ]"
+        >
           <el-input v-model="registerForm.email"></el-input>
         </el-form-item>
-        <el-form-item label="密码"
-                      prop="pass"
-                      :rules="[
-      { required: true, message: '请输入密码', trigger: 'blur' } 
-    ]">
-          <el-input type="password"
-                    v-model="registerForm.password"
-                    autocomplete="off"></el-input>
+        <el-form-item
+          label="Password"
+          prop="pass"
+          :rules="[
+            { required: true, message: 'Pasword is required', trigger: 'blur' },
+          ]"
+        >
+          <el-input
+            type="password"
+            v-model="registerForm.password"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="昵称"
-                      prop="name">
+        <el-form-item label="Nick Name" prop="name">
           <el-input v-model="registerForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="邀请码"
-                      prop="invitecode">
+        <el-form-item label="Invitation Code" prop="invitecode">
           <el-input v-model="registerForm.invitecode"></el-input>
         </el-form-item>
-        <div class='btns'>
-          <el-button type="primary"
-                     @click="register()">提交</el-button>
-          <el-button @click="resetForm('registerForm')">重置</el-button>
+        <div class="btns">
+          <el-button type="primary" @click="register()">Submit</el-button>
+          <el-button @click="resetForm('registerForm')">Reset</el-button>
         </div>
       </el-form>
-      <span v-on:click="ToLogin">已有账号？马上登录</span>
+      <span v-on:click="ToLogin">Has an account？Login</span>
+    </div>
+    <hr />
+    <div class="ii-login-wrap">
+      <h3>Login with Internet Identity</h3>
+      <div v-if="authClient.state.isAuthenticated">
+        You are LoggedIn! <br />
+        Principal: {{ authClient.state.principal }}
+        <div><el-button @click="iiLogout()">logout </el-button></div>
+      </div>
+      <div v-else>
+        <div class="btns">
+          <el-button type="primary" @click="iiLogin()">Login</el-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -155,74 +192,87 @@ span:hover {
 </style>
 
 <script>
-
 //import { setCookie, getCookie } from '../../assets/js/cookie.js'
-import { login, register } from "@/api/login"
+import { login, register } from "@/api/login";
+import { useAuthClient } from "@/utils/login_hooks";
 export default {
-  data () {
+  data() {
     return {
       loginForm: {
-        email: '',
-        password: ''
+        email: "",
+        password: "",
       },
       registerForm: {
-        email: '',
-        password: '',
-        name: '',
-        invitecode: ''
+        email: "",
+        password: "",
+        name: "",
+        invitecode: "",
       },
-
-      tishi: '',
+      tishi: "",
       showTishi: false,
       showLogin: true,
       showRegister: false,
-    }
+      authClient: useAuthClient(),
+    };
   },
-  mounted () {
+  mounted() {
     /*if (getCookie('username')) {
       this.$router.push('/home')
     }*/
   },
   methods: {
-    resetForm (formName) {
+    resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    async login () {
-      let datas = this.loginForm
+    async login() {
+      let datas = this.loginForm;
       let res = await login(datas);
-      console.log(res)
-      this.tishi = "登陆成功"
-      this.showTishi = true
-      this.tishi = "登录成功"
-      this.showTishi = true
+      console.log(res);
+      this.tishi = "登陆成功";
+      this.showTishi = true;
+      this.tishi = "登录成功";
+      this.showTishi = true;
       //setCookie('username', this.username, 1000 * 60)
-      setTimeout(function () {
-        this.$router.push({ path: '/', query: { id: 1 } })
-      }.bind(this), 1000)
+      setTimeout(
+        function () {
+          this.$router.push({ path: "/", query: { id: 1 } });
+        }.bind(this),
+        1000
+      );
+    },
 
+    async iiLogin() {
+      console.log("iilogin");
+      await this.authClient.login(this.authClient.state);
     },
-    ToRegister () {
-      this.showRegister = true
-      this.showLogin = false
+
+    async iiLogout() {
+      await this.authClient.logout();
     },
-    ToLogin () {
-      this.showRegister = false
-      this.showLogin = true
+
+    ToRegister() {
+      this.showRegister = true;
+      this.showLogin = false;
     },
-    async register () {
-      let datas = this.registerForm
+    ToLogin() {
+      this.showRegister = false;
+      this.showLogin = true;
+    },
+    async register() {
+      let datas = this.registerForm;
       let res = await register(datas);
 
-      this.tishi = "注册成功"
-      this.showTishi = true
-      setTimeout(function () {
-        this.showRegister = false
-        this.showLogin = true
-        this.showTishi = false
-      }.bind(this), 1000)
-
-
-    }
-  }
-}
+      this.tishi = "注册成功";
+      this.showTishi = true;
+      setTimeout(
+        function () {
+          this.showRegister = false;
+          this.showLogin = true;
+          this.showTishi = false;
+        }.bind(this),
+        1000
+      );
+    },
+  },
+};
 </script>

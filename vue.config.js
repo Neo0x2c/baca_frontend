@@ -1,3 +1,8 @@
 module.exports = {
-	lintOnSave: false
+	lintOnSave: false,
+	transpileDependencies: [
+		// can be string or regex
+		'@dfinity/*',
+	]
+
 }
