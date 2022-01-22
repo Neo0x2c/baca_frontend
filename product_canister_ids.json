@@ -1,17 +1,11 @@
 {
-  "__Candid_UI": {
-    "local": "qoctq-giaaa-aaaaa-aaaea-cai"
-  },
   "baca": {
-    "local": "rno2w-sqaaa-aaaaa-aaacq-cai"
+    "ic": "irytr-gaaaa-aaaaj-aafhq-cai"
   },
   "dip20": {
-    "local": "renrk-eyaaa-aaaaa-aaada-cai"
+    "ic": "kmf5z-viaaa-aaaaj-aafia-cai"
   },
   "reward": {
-    "local": "qsgjb-riaaa-aaaaa-aaaga-cai"
-  },
-  "www": {
-    "local": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+    "ic": "kle3n-yqaaa-aaaaj-aafiq-cai"
   }
 }

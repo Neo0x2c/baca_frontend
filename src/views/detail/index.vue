@@ -149,7 +149,6 @@ import { articleDetail, articleLike, articleDisLike } from "@/api/article.js";
 import { userBanllance, userTransferToBack } from "@/api/mine.js";
 import { setToken, getToken } from "@/utils/token.js";
 import { Notification } from "element-ui";
-import userTransfer from "@/utils/handleStake.js";
 import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/antd.css";
 import { Loading } from "element-ui";

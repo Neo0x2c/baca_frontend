@@ -1,6 +1,8 @@
 const path = require("path");
 let localCanisters, prodCanisters, canisters;
 
+// const dfx_network = "local"
+const dfx_network = "ic"
 
 function initCanisterIds() {
 	try {
@@ -10,22 +12,20 @@ function initCanisterIds() {
 	}
 
 	try {
-		localCanisters = require(path.resolve("canister_ids.json"));
+		localCanisters = require(path.resolve("local_canister_ids.json"));
 	} catch (error) {
 		console.log("No local canister_ids.json found. Continuing production");
 	}
 
-	const network =
-		process.env.DFX_NETWORK ||
-		(process.env.NODE_ENV === "production" ? "ic" : "local");
-
-	canisters = network === "local" ? localCanisters : prodCanisters;
+	canisters = dfx_network === "local" ? localCanisters : prodCanisters;
 
 	for (const canister in canisters) {
 		process.env["VUE_APP_" + canister.toUpperCase() + "_CANISTER_ID"] =
-			canisters[canister][network];
+			canisters[canister][dfx_network];
 	}
+	process.env["VUE_APP_NETWORK"] = dfx_network
 }
+
 initCanisterIds();
 
 module.exports = {

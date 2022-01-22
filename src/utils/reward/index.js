@@ -35,4 +35,5 @@ export const createActor = (canisterId, options) => {
  * A ready-to-use agent for the reward canister
  * @type {import("@dfinity/agent").ActorSubclass<import("./reward.did.js")._SERVICE>}
  */
-export const reward = createActor(canisterId, { agentOptions: { host: "http://localhost:8000" } });
+// export const reward = createActor(canisterId, { agentOptions: { host: "http://localhost:8000" } });
+export const reward = createActor(canisterId);

@@ -35,4 +35,5 @@ export const createActor = (canisterId, options) => {
  * A ready-to-use agent for the dip20 canister
  * @type {import("@dfinity/agent").ActorSubclass<import("./dip20.did.js")._SERVICE>}
  */
-export const dip20 = createActor(canisterId, { agentOptions: { host: "http://localhost:8000" } });
+// export const dip20 = createActor(canisterId, { agentOptions: { host: "http://localhost:8000" } });
+export const dip20 = createActor(canisterId);
