@@ -1,7 +1,4 @@
-
-import store from '@/store/index.js'
-import router from '@/router/index.js'
-import { setToken,getToken} from "@/utils/token.js";
+import {getToken} from "@/utils/token.js";
 let myPlugin = {
     checkLogin() { 
         if (getToken("bacaToken")) {
@@ -10,8 +7,7 @@ let myPlugin = {
         } else {
             // 用户未登录  
             return false;
-        }
-
+        } 
     },
     checkWallet() { 
     	if (getToken("bacaWallet")) {  

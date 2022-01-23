@@ -3,8 +3,7 @@ import { clear } from "local-storage";
 import { createActor as createRewardActor, canisterId as rewardCanisterId } from "./reward";
 import { createActor as createDip20Actor, canisterId as dip20CanisterId } from "./dip20";
 
-export function useAuthClient() {
-
+export function useAuthClient() { 
   var state = {
     isAuthenticated: false,
     principal: "",
@@ -90,7 +89,8 @@ export function useAuthClient() {
       initRewardActor(state_);
     }
     var ret = await state_.rewardActor.collectReadReward()
-    console.log(ret);
+    console.log('end collect reward',ret); 
+    return ret
     //TODO handle return value
   }
 
