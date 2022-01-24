@@ -77,9 +77,7 @@ type Operation =
  variant {
    approve;
    burn;
-   getReward;
    mint;
-   stake;
    transfer;
    transferFrom;
  };

@@ -1,19 +1,13 @@
-import {getToken} from "@/utils/token.js";
+
 let myPlugin = {
-    checkLogin() { 
-        if (getToken("bacaToken")) {
-            // 用户已登录
+    checkLogin() {
+        return false;
+    },
+    checkWallet() {
+        if (getToken("bacaWallet")) {
             return true;
         } else {
-            // 用户未登录  
             return false;
-        } 
-    },
-    checkWallet() { 
-    	if (getToken("bacaWallet")) {  
-            return true;
-        } else {  
-          return false;
         }
     },
     // 一般插件内的对象要提供一个install方法

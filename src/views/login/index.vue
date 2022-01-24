@@ -1,89 +1,99 @@
 <template>
   <div class="login">
-    <div class="login-wrap"
-         v-show="showLogin">
+    <div class="login-wrap" v-show="showLogin">
       <h3>Login</h3>
       <p v-show="showTishi">{{ tishi }}</p>
-      <el-form :model="loginForm"
-               status-icon
-               ref="loginForm"
-               label-width="30%"
-               class="demo-ruleForm">
-        <el-form-item prop="email"
-                      label="Email"
-                      :rules="[
+      <el-form
+        :model="loginForm"
+        status-icon
+        ref="loginForm"
+        label-width="30%"
+        class="demo-ruleForm"
+      >
+        <el-form-item
+          prop="email"
+          label="Email"
+          :rules="[
             { required: true, message: 'Email is required', trigger: 'blur' },
             {
               type: 'email',
               message: 'Email is invalid',
               trigger: ['blur', 'change'],
             },
-          ]">
+          ]"
+        >
           <el-input v-model="loginForm.email"></el-input>
         </el-form-item>
-        <el-form-item label="Password"
-                      prop="pass"
-                      :rules="[
+        <el-form-item
+          label="Password"
+          prop="pass"
+          :rules="[
             {
               required: true,
               message: 'Password is required',
               trigger: 'blur',
             },
-          ]">
-          <el-input type="password"
-                    v-model="loginForm.password"
-                    autocomplete="off"></el-input>
+          ]"
+        >
+          <el-input
+            type="password"
+            v-model="loginForm.password"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
         <div class="btns">
-          <el-button type="primary"
-                     @click="login()">Login</el-button>
+          <el-button type="primary" @click="login()">Login</el-button>
           <!-- <el-button @click="resetForm('loginForm')">重置</el-button> -->
         </div>
       </el-form>
       <span v-on:click="ToRegister">Register for a new account</span>
     </div>
 
-    <div class="register-wrap"
-         v-show="showRegister">
+    <div class="register-wrap" v-show="showRegister">
       <h3>Register</h3>
       <p v-show="showTishi">{{ tishi }}</p>
-      <el-form :model="registerForm"
-               status-icon
-               ref="registerForm"
-               label-width="30%"
-               class="demo-ruleForm">
-        <el-form-item prop="email"
-                      label="Email"
-                      :rules="[
+      <el-form
+        :model="registerForm"
+        status-icon
+        ref="registerForm"
+        label-width="30%"
+        class="demo-ruleForm"
+      >
+        <el-form-item
+          prop="email"
+          label="Email"
+          :rules="[
             { required: true, message: 'Email is required', trigger: 'blur' },
             {
               type: 'email',
               message: 'Invalid Email',
               trigger: ['blur', 'change'],
             },
-          ]">
+          ]"
+        >
           <el-input v-model="registerForm.email"></el-input>
         </el-form-item>
-        <el-form-item label="Password"
-                      prop="pass"
-                      :rules="[
+        <el-form-item
+          label="Password"
+          prop="pass"
+          :rules="[
             { required: true, message: 'Pasword is required', trigger: 'blur' },
-          ]">
-          <el-input type="password"
-                    v-model="registerForm.password"
-                    autocomplete="off"></el-input>
+          ]"
+        >
+          <el-input
+            type="password"
+            v-model="registerForm.password"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="Nick Name"
-                      prop="name">
+        <el-form-item label="Nick Name" prop="name">
           <el-input v-model="registerForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="Invitation Code"
-                      prop="invitecode">
+        <el-form-item label="Invitation Code" prop="invitecode">
           <el-input v-model="registerForm.invitecode"></el-input>
         </el-form-item>
         <div class="btns">
-          <el-button type="primary"
-                     @click="register()">Submit</el-button>
+          <el-button type="primary" @click="register()">Submit</el-button>
           <el-button @click="resetForm('registerForm')">Reset</el-button>
         </div>
       </el-form>
@@ -102,11 +112,14 @@
         <div>
           <el-button @click="collectReward()">collectReward </el-button>
         </div>
+        <div>
+          <input class="inviter" v-model="inviter" />
+          <el-button @click="addInviter()"> Add Inviter </el-button>
+        </div>
       </div>
       <div v-else>
         <div class="btns">
-          <el-button type="primary"
-                     @click="iiLogin()">Login</el-button>
+          <el-button type="primary" @click="iiLogin()">Login</el-button>
         </div>
       </div>
     </div>
@@ -114,6 +127,9 @@
 </template>
 
 <style>
+.inviter {
+  display: inline;
+}
 .btns {
   padding-left: 3em;
   margin-bottom: 1em;
@@ -191,12 +207,13 @@ import { setToken, getToken } from "@/utils/token.js";
 import { login, register } from "@/api/login";
 import { useAuthClient } from "@/utils/login_hooks";
 export default {
-  data () {
+  data() {
     return {
       loginForm: {
         email: "",
         password: "",
       },
+      inviter: "",
       registerForm: {
         email: "",
         password: "",
@@ -210,21 +227,21 @@ export default {
       authClient: useAuthClient(),
     };
   },
-  mounted () {
+  mounted() {
     /*if (getCookie('username')) {
       this.$router.push('/home')
     }*/
   },
   methods: {
-    resetForm (formName) {
+    resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    async login () {
+    async login() {
       let datas = this.loginForm;
       let res = await login(datas);
       console.log(res);
       if (res.status == 200 && res.data && res.data.data.token) {
-        setToken("bacaToken", res.data.data.token)
+        setToken("bacaToken", res.data.data.token);
         this.tishi = "登陆成功";
         this.showTishi = true;
         this.tishi = "登录成功";
@@ -237,40 +254,45 @@ export default {
           1000
         );
       }
-
     },
 
-    async iiLogin () {
+    async iiLogin() {
       console.log("iilogin");
       await this.authClient.login(this.authClient.state);
     },
 
-    async iiLogout () {
+    async addInviter() {
+      console.log("add inviter");
+      await this.authClient.addInviter(this.authClient.state, this.inviter);
+      console.log("add inviter success");
+    },
+
+    async iiLogout() {
       await this.authClient.logout(this.authClient.state);
     },
 
-    async collectReward () {
+    async collectReward() {
       await this.authClient.collectReward(this.authClient.state);
     },
 
-    ToRegister () {
+    ToRegister() {
       this.showRegister = true;
       this.showLogin = false;
     },
-    ToLogin () {
+    ToLogin() {
       this.showRegister = false;
       this.showLogin = true;
     },
-    async register () {
+    async register() {
       let datas = this.registerForm;
       let res = await register(datas);
       if (res.status == 200 && res.data && res.data.data.token) {
-        setToken("bacaToken", res.data.data.token)
+        setToken("bacaToken", res.data.data.token);
         this.tishi = "注册成功";
         this.showTishi = true;
         this.$router.push({ path: "/", query: { id: 1 } });
       }
-    }
-  }
+    },
+  },
 };
 </script>
