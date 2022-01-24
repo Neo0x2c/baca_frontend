@@ -167,7 +167,7 @@ import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/antd.css";
 import { Loading } from "element-ui";
 import Interval from "@/utils/interval";
-import { useAuthClient } from "@/utils/login_hooks";
+import { IcpAuthClient } from "@/utils/login_hooks";
 
 export default {
   name: "Detail",
@@ -188,7 +188,7 @@ export default {
       progress: 0,
       activate: false,
       imgurl: "bct_o.gif",
-      authClient: useAuthClient(),
+      authClient: new IcpAuthClient(),
     };
   },
   watch: {
@@ -202,7 +202,7 @@ export default {
       var that = this;
       if (newVal === 100) {
         Interval.stop(that);
-        let res = await this.authClient.collectReward(this.authClient.state);
+        let res = await this.authClient.collectReward();
         if (res.rewardLeft == 0n) {
           this.imgurl = "bct_c.png";
           const h = this.$createElement;
@@ -227,6 +227,9 @@ export default {
   async created() {
     //获取当前进度
     if (this.$checkLogin() && this.$checkWallet()) {
+      if (this.authClient.client == null) {
+        await this.authClient.createClient();
+      }
       let lastprogress = Number(getToken("readingProgress"));
       if (lastprogress !== undefined || lastprogress != null) {
         this.progress = lastprogress;

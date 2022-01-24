@@ -3,54 +3,58 @@
     <MyHeader />
     <div class="myheadercontain">
       <div class="tab-tilte">
-        <div @click="tabChange(0,child1)"
+        <!-- <div @click="tabChange(0,child1)"
              v-bind:class="{ tabactivate:0==current}">My Votes</div>
         <div @click="tabChange(1,child2)"
-             v-bind:class="{ tabactivate:1==current}">My Medal</div>
-        <div @click="tabChange(2,child3)"
-             v-bind:class="{ tabactivate:2==current}">My Earnings</div>
+             v-bind:class="{ tabactivate:1==current}">My Medal</div> -->
+        <div
+          @click="tabChange(2, child3)"
+          v-bind:class="{ tabactivate: 2 == current }"
+        >
+          My Earnings
+        </div>
       </div>
       <div :is="currentView"></div>
     </div>
   </div>
 </template>
 <script>
-import MyHeader from './myheader'
-import child1 from './myvote';
-import child2 from './mymedal';
-import child3 from './myearnings';
+import MyHeader from "./myheader";
+// import child1 from "./myvote";
+// import child2 from "./mymedal";
+import child3 from "./myearnings";
 
 export default {
-  name: 'Mine',
-  async created () {
+  name: "Mine",
+  async created() {
     if (this.$checkLogin()) {
-    } else { this.$router.push("/login"); }
-
-  },
-  data () {
-    return {
-      current: 0,
-      child1: 'child1',
-      child2: 'child2',
-      child3: 'child3',
-      currentView: 'child1' // 默认选中第一项
+    } else {
+      this.$router.push("/login");
     }
   },
+  data() {
+    return {
+      current: 0,
+      // child1: "child1",
+      // child2: "child2",
+      child3: "child3",
+      currentView: "child3", // 默认选中第一项
+    };
+  },
   methods: {
-    tabChange (index, tabItem) {
+    tabChange(index, tabItem) {
       this.current = index;
       this.currentView = tabItem;
       var el = event.currentTarget;
     },
-
   },
   components: {
-    child1,
-    child2,
+    // child1,
+    // child2,
     child3,
-    MyHeader
-  }
-}
+    MyHeader,
+  },
+};
 </script>
 <style scoped>
 .tabactivate {

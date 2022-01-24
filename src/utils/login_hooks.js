@@ -5,141 +5,107 @@ import { createActor as createRewardActor, canisterId as rewardCanisterId } from
 import { createActor as createDip20Actor, canisterId as dip20CanisterId } from "./dip20";
 import { createActor as createBacaActor, canisterId as bacaCanisterId } from "./baca";
 
-export function useAuthClient() {
-  var state = {
-    isAuthenticated: false,
-    principal: "",
-    authClient: null,
-    rewardActor: null,
-    dip20Actor: null,
-    bacaActor: null,
-    balance: 0
-  };
+export class IcpAuthClient {
 
-  const days = BigInt(1);
-  const hours = BigInt(24);
-  const nanoseconds = BigInt(3600000000000);
-  const public_II_url = "https://identity.ic0.app/#authorize";
+  async createClient() {
+    this.client = await AuthClient.create();
+    this.isAuthenticated = await this.client.isAuthenticated();
+    this.identity = this.client.getIdentity();
+    this.principal = this.identity.getPrincipal().toText();
+    console.log('client created');
+  }
 
-  const login = (state_) => {
-    state_.authClient?.login({
+  initActor(createActor, canisterId) {
+    if (process.env.VUE_APP_NETWORK === "ic") {
+      return createActor(canisterId, {
+        agentOptions: {
+          identity: this.identity,
+          host: 'https://ic0.app'
+        }
+      })
+    } else {
+      return createActor(canisterId, {
+        agentOptions: {
+          identity: this.identity,
+          host: 'http://localhost:8000'
+        }
+      })
+    }
+  }
+
+  async getRewardHistory() {
+    if (this.rewardActor == null) {
+      this.rewardActor = this.initActor(createRewardActor, rewardCanisterId);
+    }
+    return this.rewardActor.getLatestRewardHistory(this.client.getIdentity().getPrincipal(), 20);
+  }
+
+  async login() {
+    const days = BigInt(1);
+    const hours = BigInt(24);
+    const nanoseconds = BigInt(3600000000000);
+    const public_II_url = "https://identity.ic0.app/#authorize";
+    this.client?.login({
       identityProvider: process.env.VUE_APP_NETWORK === "ic"
         ? public_II_url
         : "http://" + process.env.VUE_APP_IDENTITY_CANISTER_ID + ".localhost:8000/#authorize",
       onSuccess: () => {
-        state_.isAuthenticated = true;
-        state_.principal = state_.authClient.getIdentity().getPrincipal().toText()
-        getBalance(state_);
+        this.isAuthenticated = true;
+        this.identity = this.client.getIdentity();
+        this.principal = this.client.getIdentity().getPrincipal().toText();
+        this.getBalance();
       },
       maxTimeToLive: days * hours * nanoseconds,
     });
-  };
-
-  const initDip20Actor = (state_) => {
-    console.log(dip20CanisterId)
-    const actor =
-      process.env.VUE_APP_NETWORK === "ic"
-        ? createDip20Actor(dip20CanisterId, {
-          agentOptions: {
-            identity: state_.authClient.getIdentity(),
-            host: 'https://ic0.app'
-          }
-        })
-        : createDip20Actor(dip20CanisterId, {
-          agentOptions: {
-            identity: state_.authClient.getIdentity(),
-            host: 'http://localhost:8000'
-          }
-        })
-    state_.dip20Actor = actor;
-  };
-
-  const initBacaActor = (state_) => {
-    const actor =
-      process.env.VUE_APP_NETWORK === "ic"
-        ? createBacaActor(bacaCanisterId, {
-          agentOptions: {
-            identity: state_.authClient?.getIdentity(),
-            host: 'https://ic0.app'
-          }
-        })
-        : createBacaActor(bacaCanisterId, {
-          agentOptions: {
-            identity: state_.authClient?.getIdentity(),
-            host: 'http://localhost:8000'
-          }
-        })
-    state_.bacaActor = actor;
   }
 
-  const initRewardActor = (state_) => {
-    const actor =
-      process.env.VUE_APP_NETWORK === "ic"
-        ? createRewardActor(rewardCanisterId, {
-          agentOptions: {
-            identity: state_.authClient.getIdentity(),
-            host: 'https://ic0.app'
-          }
-        })
-        : createRewardActor(rewardCanisterId, {
-          agentOptions: {
-            identity: state_.authClient.getIdentity(),
-            host: 'http://localhost:8000'
-          }
-        })
-    state_.rewardActor = actor;
-  }
-
-  const getBalance = async (state_) => {
-    if (state_.dip20Actor == null) {
-      initDip20Actor(state_);
-    }
-    var result = await state_.dip20Actor.balanceOf(state_.authClient.getIdentity().getPrincipal());
-    result = Number(result)
-    state_.balance = result;
-  }
-
-  const addInviter = async (state_, pText) => {
-    if (state_.bacaActor == null) {
-      initBacaActor(state_);
-    }
-    await state_.bacaActor?.addInviter(Principal.fromText(pText));
-    alert("Successfully add " + pText + " as your inviter");
-  }
-
-  const collectReward = async (state_) => {
-    console.log('start collect reward')
-    if (state_.rewardActor == null) {
-      initRewardActor(state_);
-    }
-    var ret = await state_.rewardActor.collectReadReward()
-    console.log('end collect reward', ret);
-    alert("successful collect reward");
-    return ret
-    //TODO handle return value
-  }
-
-  const logout = async (state_) => {
+  async logout() {
     clear();
-    state_.isAuthenticated = false;
-    state_.rewardActor = undefined;
-    await state_.authClient?.logout();
+    this.isAuthenticated = false;
+    this.dip20Actor = null;
+    this.bacaActor = null;
+    this.rewardActor = null;
+    this.balance = null;
+    this.identity = null;
+    this.principal = null;
+    await this.client?.logout();
   };
 
-  AuthClient.create().then(async (client) => {
-    const isAuthenticated1 = await client.isAuthenticated();
-    state.authClient = client;
-    state.isAuthenticated = isAuthenticated1;
-    state.principal = client.getIdentity().getPrincipal().toText()
-    getBalance(state);
-  })
-
-  return {
-    state,
-    login,
-    logout,
-    collectReward,
-    getBalance,
-    addInviter,
+  async getBalance() {
+    console.log('start getting balance');
+    if (this.dip20Actor == null) {
+      this.dip20Actor = this.initActor(createDip20Actor, dip20CanisterId);
+    }
+    var result = await this.dip20Actor.balanceOf(this.client.getIdentity().getPrincipal());
+    this.balance = Number(result);
   };
+
+  async addInviter(pText) {
+    if (this.bacaActor == null) {
+      this.bacaActor = this.initActor(createBacaActor, bacaCanisterId);
+    }
+    await this.bacaActor.addInviter(Principal.fromText(pText));
+    alert("Successfully add " + pText + " as your inviter");
+  };
+
+  async collectReward() {
+    if (this.rewardActor == null) {
+      this.rewardActor = this.initActor(createRewardActor, rewardCanisterId);
+    }
+    var ret = await this.rewardActor.collectReadReward();
+    alert("successful collect reward");
+    //TODO handle return error cases
+    return ret;
+  };
+
+  constructor() {
+    this.isAuthenticated = false;
+    this.client = null;
+    this.dip20Actor = null;
+    this.bacaActor = null;
+    this.rewardActor = null;
+    this.balance = null;
+    this.principal = null;
+    this.identity = null;
+  }
 }

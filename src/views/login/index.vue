@@ -102,10 +102,10 @@
     <hr />
     <div class="ii-login-wrap">
       <h3>Login with Internet Identity</h3>
-      <div v-if="authClient.state.isAuthenticated">
+      <div v-if="icpClient.isAuthenticated">
         You are LoggedIn! <br />
-        Principal: {{ authClient.state.principal }} <br />
-        Your BAT balance: {{ authClient.state.balance }}
+        Principal: {{ icpClient.principal }} <br />
+        Your BAT balance: {{ icpClient.balance }}
         <div>
           <el-button @click="iiLogout()">logout </el-button>
         </div>
@@ -205,8 +205,16 @@ span:hover {
 <script>
 import { setToken, getToken } from "@/utils/token.js";
 import { login, register } from "@/api/login";
-import { useAuthClient } from "@/utils/login_hooks";
+import { IcpAuthClient } from "@/utils/login_hooks";
 export default {
+  async created() {
+    if (this.icpClient.client == null) {
+      await this.icpClient.createClient();
+    }
+    if (this.icpClient.isAuthenticated) {
+      await this.icpClient.getBalance();
+    }
+  },
   data() {
     return {
       loginForm: {
@@ -224,7 +232,7 @@ export default {
       showTishi: false,
       showLogin: true,
       showRegister: false,
-      authClient: useAuthClient(),
+      icpClient: new IcpAuthClient(),
     };
   },
   mounted() {
@@ -258,21 +266,21 @@ export default {
 
     async iiLogin() {
       console.log("iilogin");
-      await this.authClient.login(this.authClient.state);
+      await this.icpClient.login();
     },
 
     async addInviter() {
       console.log("add inviter");
-      await this.authClient.addInviter(this.authClient.state, this.inviter);
+      await this.icpClient.addInviter(this.inviter);
       console.log("add inviter success");
     },
 
     async iiLogout() {
-      await this.authClient.logout(this.authClient.state);
+      await this.icpClient.logout();
     },
 
     async collectReward() {
-      await this.authClient.collectReward(this.authClient.state);
+      await this.icpClient.collectReward();
     },
 
     ToRegister() {

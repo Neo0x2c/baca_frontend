@@ -1,7 +1,7 @@
-
 let myPlugin = {
+
     checkLogin() {
-        return false;
+        return true;
     },
     checkWallet() {
         if (getToken("bacaWallet")) {
