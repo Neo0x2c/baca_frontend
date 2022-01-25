@@ -1,8 +1,9 @@
 <template>
   <div id="app">
-    <Header />
+    <Header></Header>
     <router-view />
-    <Footer />
+    <Footer></Footer>
+
   </div>
 </template> 
 <script>
@@ -13,6 +14,9 @@ export default {
   name: 'App',
   components: {
     Header, Footer
+  },
+  mounted () {
+    this.currPath = this.$route.path
   }
 }
 </script>

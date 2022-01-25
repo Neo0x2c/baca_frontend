@@ -1,3 +1,4 @@
+import { getToken } from "@/utils/token.js";
 let myPlugin = {
 
     checkLogin() {

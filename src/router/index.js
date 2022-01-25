@@ -7,6 +7,7 @@ import mine from '@/views/mine/index'
 import login from '@/views/login/index' 
 import wallet from '@/views/mine/mywallet' 
 import login1 from '@/views/login/login' 
+import register from '@/views/login/register' 
 Vue.use(Router)
 
 export default new Router({
@@ -45,6 +46,11 @@ export default new Router({
       path: '/login1',
       name: 'login1',
       component: login1
+    } ,
+    {
+      path: '/register',
+      name: 'register',
+      component: register
     } 
   ]
 })
