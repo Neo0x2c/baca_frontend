@@ -1,13 +1,11 @@
 <template>
   <div class="loginbody">
-
     <div class="login">
-      REgisterREgister
-      <div class="login-wrap"
-           v-show="showLogin">
+
+      <div class="login-wrap">
         <img src="@/assets/img/logo_3.png"
              class="logoimg" />
-        <p v-show="showTishi">REgister</p>
+        <p v-show="showTishi">{{ tishi }}</p>
         <el-form :model="loginForm"
                  status-icon
                  ref="loginForm">
@@ -46,7 +44,8 @@
           </div>
         </el-form>
         <div class="toRegister">
-          <span>Don't have an account？</span><span style="color:rgba(58,103,215,1);">Sign up</span>
+          <span>Don't have an account？</span>
+          <router-link to='/register'><span style="color:rgba(58,103,215,1);">Sign up</span></router-link>
         </div>
 
         <span v-on:click="ToRegister"> </span>
@@ -155,16 +154,10 @@ export default {
         name: "",
         invitecode: "",
       },
-      tishi: "",
-      showTishi: false,
-      showLogin: true,
-      showRegister: false
+
     };
   },
   mounted () {
-    /*if (getCookie('username')) {
-      this.$router.push('/home')
-    }*/
   },
   methods: {
     resetForm (formName) {
@@ -176,16 +169,7 @@ export default {
       console.log(res);
       if (res.status == 200 && res.data && res.data.data.token) {
         setToken("bacaToken", res.data.data.token)
-        this.tishi = "登陆成功";
-        this.showTishi = true;
-        this.tishi = "登录成功";
-        this.showTishi = true;
-        setTimeout(
-          function () {
-            this.$router.push({ path: "/", query: { id: 1 } });
-          }.bind(this),
-          1000
-        );
+        this.$router.push({ path: "/", query: { id: 1 } });
       }
 
     },
