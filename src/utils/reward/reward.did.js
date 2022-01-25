@@ -53,4 +53,6 @@ export const idlFactory = ({ IDL }) => {
   });
   return Reward;
 };
-export const init = ({ IDL }) => { return [IDL.Principal]; };
+export const init = ({ IDL }) => {
+  return [IDL.Principal, IDL.Principal, IDL.Principal];
+};

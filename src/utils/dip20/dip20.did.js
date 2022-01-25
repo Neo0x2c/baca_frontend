@@ -30,8 +30,6 @@ export const idlFactory = ({ IDL }) => {
     'burn' : IDL.Null,
     'mint' : IDL.Null,
     'approve' : IDL.Null,
-    'stake' : IDL.Null,
-    'getReward' : IDL.Null,
     'transfer' : IDL.Null,
   });
   const TransactionStatus = IDL.Variant({

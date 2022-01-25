@@ -52,4 +52,4 @@ type Reward =
    setTotalDailyRewardLimit: (nat) -> () oneway;
    transferToAdmin: (nat) -> (TxReceipt);
  };
-service : (principal) -> Reward
+service : (principal, principal, principal) -> Reward

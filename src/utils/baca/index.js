@@ -1,16 +1,16 @@
 import { Actor, HttpAgent } from "@dfinity/agent";
 
 // Imports and re-exports candid interface
-import { idlFactory } from './dip20.did.js';
-export { idlFactory } from './dip20.did.js';
+import { idlFactory } from './baca.did.js';
+export { idlFactory } from './baca.did.js';
 // CANISTER_ID is replaced by webpack based on node environment
-export const canisterId = process.env.VUE_APP_DIP20_CANISTER_ID;
+export const canisterId = process.env.VUE_APP_BACA_CANISTER_ID;
 
 /**
  * 
  * @param {string | import("@dfinity/principal").Principal} canisterId Canister ID of Agent
  * @param {{agentOptions?: import("@dfinity/agent").HttpAgentOptions; actorOptions?: import("@dfinity/agent").ActorConfig}} [options]
- * @return {import("@dfinity/agent").ActorSubclass<import("./dip20.did.js")._SERVICE>}
+ * @return {import("@dfinity/agent").ActorSubclass<import("./baca.did.js")._SERVICE>}
  */
 export const createActor = (canisterId, options) => {
   const agent = new HttpAgent({ ...options?.agentOptions });
@@ -32,7 +32,7 @@ export const createActor = (canisterId, options) => {
 };
 
 /**
- * A ready-to-use agent for the dip20 canister
- * @type {import("@dfinity/agent").ActorSubclass<import("./dip20.did.js")._SERVICE>}
+ * A ready-to-use agent for the baca canister
+ * @type {import("@dfinity/agent").ActorSubclass<import("./baca.did.js")._SERVICE>}
  */
-export const dip20 = createActor(canisterId);
+export const baca = createActor(canisterId);

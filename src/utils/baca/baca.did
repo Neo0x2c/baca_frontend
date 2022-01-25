@@ -1,0 +1,9 @@
+service : {
+  addInviter: (principal) -> () oneway;
+  displayInviteMap: () -> (vec record {
+                                 principal;
+                                 principal;
+                               }) query;
+  getInviter: (principal) -> (opt principal) query;
+  removeInviter: () -> () oneway;
+}

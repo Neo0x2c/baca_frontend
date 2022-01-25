@@ -12,8 +12,6 @@ export type Operation = { 'transferFrom' : null } |
   { 'burn' : null } |
   { 'mint' : null } |
   { 'approve' : null } |
-  { 'stake' : null } |
-  { 'getReward' : null } |
   { 'transfer' : null };
 export type Time = bigint;
 export interface Token {
