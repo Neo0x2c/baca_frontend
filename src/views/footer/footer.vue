@@ -26,7 +26,7 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-12 text-center">
-                        <p>Copyright 2021. All Right Reserved</p>
+                        <p>Copyright 2022. All Right Reserved</p>
                     </div>
                 </div>
             </div>
@@ -51,17 +51,12 @@
 export default {
   name: 'Footer',
   data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+    return { 
     }
   }
 }
 
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.footer-area{
-    margin-top:2em
-}
- 
+<style scoped> 
 </style>

@@ -31,3 +31,14 @@ export function register(data) {
   }) 
   return res
 }
+
+//绑定邀请码
+export function bindParent(data) { 
+  console.log(data) 
+  var res = request({  
+      url: host + "api/user/bindParent",
+      method: "post",
+      data
+  }) 
+  return res
+}

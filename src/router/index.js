@@ -1,13 +1,18 @@
 import Vue from 'vue'
-import Router from 'vue-router' 
-import home from '@/views/home/index' 
-import category from '@/views/category/index' 
-import detail from '@/views/detail/index' 
-import mine from '@/views/mine/index' 
-import login from '@/views/login/index' 
-import wallet from '@/views/mine/mywallet' 
-import login1 from '@/views/login/login' 
-import register from '@/views/login/register' 
+import Router from 'vue-router'
+import home from '@/views/home/index'
+import category from '@/views/category/index'
+import detail from '@/views/detail/index'
+import mine from '@/views/mine/index'
+import login1 from '@/views/login/index'
+import wallet from '@/views/mine/mywallet'
+import login from '@/views/login/login'
+import register from '@/views/login/register'
+
+import inviter from '@/views/invite/inviter'
+import invitee from '@/views/invite/invitee'
+//import register from '@/views/login/register' 
+
 Vue.use(Router)
 
 export default new Router({
@@ -17,12 +22,12 @@ export default new Router({
       name: 'home',
       component: home
     },
-     {
+    {
       path: '/category/:cate_id',
       name: 'category',
       component: category
     },
-     {
+    {
       path: '/detail/:art_id',
       name: 'detail',
       component: detail
@@ -36,7 +41,7 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: login
-    } ,
+    },
     {
       path: '/wallet',
       name: 'wallet',
@@ -46,13 +51,22 @@ export default new Router({
       path: '/login1',
       name: 'login1',
       component: login1
-    } ,
+    },
     {
       path: '/register',
       name: 'register',
       component: register
-    } 
+    },
+    {
+      path: '/inviter',
+      name: 'inviter',
+      component: inviter
+    },
+    {
+      path: '/invitee',
+      name: 'invitee',
+      component: invitee
+    }
   ]
 })
 
- 

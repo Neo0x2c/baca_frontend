@@ -163,12 +163,13 @@
 <script>
 import { articleDetail, articleLike, articleDisLike } from "@/api/article.js";
 import { Notification } from "element-ui";
+import { Message } from 'element-ui';
 import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/antd.css";
 import { Loading } from "element-ui";
 import Interval from "@/utils/interval";
 import { IcpAuthClient } from "@/utils/login_hooks";
-
+import { getToken,setToken } from "@/utils/token.js";
 export default {
   name: "Detail",
   components: {
@@ -201,6 +202,10 @@ export default {
     async progress(newVal, oldVal) {
       var that = this;
       if (newVal === 100) {
+         var mesopt = {
+          message: 'To get reward,please wait a memont......' 
+         }; 
+         Message(mesopt) 
         Interval.stop(that);
         let res = await this.authClient.collectReward();
         if (res.rewardLeft == 0n) {
@@ -214,10 +219,16 @@ export default {
           };
           Notification(options);
         } else {
-          this.bct_jump_show = true;
-          Interval.run(that);
+          var that = this
           setTimeout(function () {
-            this.bct_jump_show = false;
+            that.bct_jump_show = true;
+          }, 1000);
+
+          //this.bct_jump_show = true;
+          Interval.run(that);
+          
+          setTimeout(function () {
+            that.bct_jump_show = false;
           }, 3000);
         }
         console.log("reward  res", res);

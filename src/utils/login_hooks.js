@@ -92,8 +92,7 @@ export class IcpAuthClient {
     if (this.rewardActor == null) {
       this.rewardActor = this.initActor(createRewardActor, rewardCanisterId);
     }
-    var ret = await this.rewardActor.collectReadReward();
-    alert("successful collect reward");
+    var ret = await this.rewardActor.collectReadReward(); 
     //TODO handle return error cases
     return ret;
   };

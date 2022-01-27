@@ -90,8 +90,7 @@
 </template>
 <script>
 import { cateList, articleList, articleTopVoteList } from "@/api/article.js";
-import { Notification } from 'element-ui';
-import { Loading } from 'element-ui';
+import { Notification } from 'element-ui'; 
 import Header from "../header/header"
 import Footer from "../footer/footer"
 

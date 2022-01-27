@@ -1,11 +1,9 @@
 <template>
-  <div class="loginbody">
-    <div class="login">
-
+  <div class="loginbody pd-top-50 pd-bottom-50">
+    <div class="login"> 
       <div class="login-wrap">
         <img src="@/assets/img/logo_3.png"
-             class="logoimg" />
-        <p v-show="showTishi">{{ tishi }}</p>
+             class="logoimg" /> 
         <el-form :model="loginForm"
                  status-icon
                  ref="loginForm">
@@ -54,10 +52,39 @@
   </div>
 </template>
 
+
+<script>
+import { setToken } from "@/utils/token.js";
+import { login  } from "@/api/login";
+export default {
+  data () {
+    return {
+      loginForm: {
+        email: "",
+        password: "",
+      } 
+    };
+  }, 
+  methods: {
+    resetForm (formName) {
+      this.$refs[formName].resetFields();
+    },
+    async login () {
+      let datas = this.loginForm;
+      let res = await login(datas);
+      console.log(res);
+      if (res.status == 200 && res.data && res.data.data.token) {
+        setToken("bacaToken", res.data.data.token)
+        this.$router.push({ path: "/", query: { id: 1 } });
+      } 
+    } 
+  }
+};
+</script>
+
 <style  scoped>
 .loginbody {
-  background-color: #3a67d7;
-  padding: 2em 0;
+  background-color: #3a67d7; 
 }
 .logoimg {
   width: 40%;
@@ -137,61 +164,3 @@ span:hover {
   }
 }
 </style>
-
-<script>
-import { setToken } from "@/utils/token.js";
-import { login, register } from "@/api/login";
-export default {
-  data () {
-    return {
-      loginForm: {
-        email: "",
-        password: "",
-      },
-      registerForm: {
-        email: "",
-        password: "",
-        name: "",
-        invitecode: "",
-      },
-
-    };
-  },
-  mounted () {
-  },
-  methods: {
-    resetForm (formName) {
-      this.$refs[formName].resetFields();
-    },
-    async login () {
-      let datas = this.loginForm;
-      let res = await login(datas);
-      console.log(res);
-      if (res.status == 200 && res.data && res.data.data.token) {
-        setToken("bacaToken", res.data.data.token)
-        this.$router.push({ path: "/", query: { id: 1 } });
-      }
-
-    },
-
-    ToRegister () {
-      this.showRegister = true;
-      this.showLogin = false;
-    },
-    ToLogin () {
-      this.showRegister = false;
-      this.showLogin = true;
-    },
-    async register () {
-      let datas = this.registerForm;
-      let res = await register(datas);
-      if (res.status == 200 && res.data && res.data.data.token) {
-        setToken("bacaToken", res.data.data.token)
-        this.tishi = "注册成功";
-        this.showTishi = true;
-        this.$router.push({ path: "/", query: { id: 1 } });
-      }
-    }
-  }
-};
-</script>

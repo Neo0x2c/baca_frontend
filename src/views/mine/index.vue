@@ -1,5 +1,5 @@
 <template>
-  <div class="pd-top-50">
+  <div class="pd-top-50 pd-bottom-50">
     <MyHeader />
     <div class="myheadercontain">
       <div class="tab-tilte">

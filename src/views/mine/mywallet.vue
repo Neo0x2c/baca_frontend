@@ -1,26 +1,35 @@
 <template>
   <div>
-    <div v-if="isAuthenticated"> You are LoggedIn! {{principal}}
-      <button @click="logout">logout</button>
+     <div class="ii-login-wrap">
+      <h3>Login with Internet Identity</h3>
+      <div v-if="icpClient.isAuthenticated">
+        You are LoggedIn! <br />
+        Principal: {{ icpClient.principal }} <br />
+        Your BAT balance: {{ icpClient.balance }}
+        <div>
+          <el-button @click="iiLogout()">logout </el-button>
+        </div>
+        <div>
+          <el-button @click="collectReward()">collectReward </el-button>
+        </div>
+        <div>
+          <input class="inviter"
+                 v-model="inviter" />
+          <el-button @click="addInviter()"> Add Inviter </el-button>
+        </div>
+      </div>
+      <div v-else>
+        <div class="btns">
+          <el-button type="primary"
+                     @click="iiLogin()">Login</el-button>
+        </div>
+      </div>
     </div>
-    <button @click="login"> Log In </button>
-    <hr className="solid" />
-    <div> <button @click="checkAdminBalance">Check Admin Balance </button>
-      <h3> Admin Balance: {{adminBalance}} </h3>
-    </div>
-    <hr className="solid" />
-    <button @click="checkMyBalance">Check My Balance</button>
-    <h3>My Balance: {{myBalance}} </h3>
-    <hr className="solid" />
-    <div> <button @click="collectReward">Collect Reward for me</button></div>
-    <hr className="solid" />
   </div>
 </template>
 <script>
 
-//import { Principal } from '@dfinity/principal';
-//import { dip20 } from "@/utils/dip20";
-//import { useAuthClient } from "@/utils/login_hooks";
+import { IcpAuthClient } from "@/utils/login_hooks";
 
 export default {
   name: 'mywallet',
@@ -32,48 +41,17 @@ export default {
       holderInfo: [],
       myBalance: 0,
       isAuthenticated: true,
-      principal: ""
+      principal: "",
+      icpClient: new IcpAuthClient(),
     }
   },
   async created () {
-    var wallet = useAuthClient();
-    /* 
-     authClient,
-      isAuthenticated,
-      login,
-      logout,
-      myactor,
-      principal*/
-    console.log(wallet)
-    //checkAdminBalance
+    console.log("iilogin");
+      await this.icpClient.login(); 
   },
 
   methods: {
-    async login () {
-      console.log("log in ")
-    },
-    async logout () {
-      console.log("log out ")
-    },
-    async checkAdminBalance () {
-      const admin_public = 'maspa-nshp5-q7zc3-4a3ir-7gqgj-pd37f-5dj4h-jnnag-smohf-jn3mh-pqe'
-      var result = await dip20.balanceOf(Principal.fromText(admin_public));
-      result = Number(result)
-      console.log(result);
-      this.adminBalance = result;
-    },
-
-    async collectReward () {
-      var result = await actor.collectReadReward();
-      console.log(result);
-    },
-
-    async checkResult () {
-      var result = await dip20.getHolders(0n, 100n);
-      console.log(result);
-      result = result.map((row) => [row[0].toText(), Number(row[1])])
-      this.holderInfo = result;
-    }
+  
   }
 }
 </script>

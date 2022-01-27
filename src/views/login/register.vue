@@ -1,63 +1,176 @@
 <template>
-  <div class="loginbody">
-    <div class="login">
-
+  <div class="loginbody pd-top-50 pd-bottom-50">
+    <!--input email and pass-->
+    <div class="login" v-show="registertip">
       <div class="login-wrap">
-        <img src="@/assets/img/logo_3.png"
-             class="logoimg" />
-        <p v-show="showTishi">{{ tishi }}</p>
-        <el-form :model="loginForm"
-                 status-icon
-                 ref="loginForm">
-          <el-form-item prop="email"
-                        :rules="[
-            { required: true, message: 'Email is required', trigger: 'blur' },
-            {
-              type: 'email',
-              message: 'Email is invalid',
-              trigger: ['blur', 'change'],
-            },
-          ]">
-            <el-input v-model="loginForm.email"
-                      class="forminput"
-                      placeholder="Email Address"
-                      required=true></el-input>
+        <img src="@/assets/img/logo_3.png" class="logoimg" />
+        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm">
+          <el-form-item prop="email">
+            <el-input
+              v-model.number="ruleForm.email"
+              class="forminput"
+              placeholder="Email Address"
+            ></el-input>
           </el-form-item>
-          <el-form-item prop="pass"
-                        :rules="[
-            {
-              required: true,
-              message: 'Password is required',
-              trigger: 'blur',
-            },
-          ]">
-            <el-input type="password"
-                      v-model="loginForm.password"
-                      placeholder="Password"
-                      autocomplete="off"></el-input>
+          <el-form-item prop="pass">
+            <el-input
+              type="password"
+              v-model="ruleForm.password"
+              autocomplete="off"
+              placeholder="Password"
+            ></el-input>
           </el-form-item>
-          <p>Account will be automatically registered</p>
-          <div class="btns">
-            <el-button type="primary"
-                       @click="login()">Login</el-button>
-            <!-- <el-button @click="resetForm('loginForm')">重置</el-button> -->
-          </div>
-        </el-form>
-        <div class="toRegister">
-          <span>Don't have an account？</span>
-          <router-link to='/register'><span style="color:rgba(58,103,215,1);">Sign up</span></router-link>
-        </div>
+          <el-form-item prop="checkPass">
+            <el-input
+              type="password"
+              v-model="ruleForm.checkPass"
+              autocomplete="off"
+              placeholder="Confirm Password"
+            ></el-input>
+          </el-form-item>
 
-        <span v-on:click="ToRegister"> </span>
+          <el-form-item>
+            <el-button type="primary" @click="signup()">Sign up</el-button>
+          </el-form-item>
+        </el-form>
+
+        <div class="toRegister">
+          <span>Already a member？</span>
+          <router-link to="/login"
+            ><span style="color: rgba(58, 103, 215, 1)"
+              >Login in</span
+            ></router-link
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- input invite code-->
+    <div class="login" v-show="codetip">
+      <div class="login-wrap">
+        <h1 style="color: #3a67d7">Have a code?</h1>
+        <el-input
+          v-model="invitecode"
+          class="forminput"
+          placeholder="CODE"
+        ></el-input>
+        <p class="codetip">
+          If you have a promo code or referral code from a friend, enter it
+          here.
+        </p>
+
+        <div class="btns">
+          <el-button type="primary" @click="next()">Continue</el-button>
+        </div>
+        <el-button class="skipbtn" @click="skip()">Skip</el-button>
+      </div>
+    </div>
+
+    <!-- success-->
+    <div class="login" v-show="successtip">
+      <div class="login-wrap">
+        <img src="@/assets/img/login/done.png" />
+        <h1 style="color: #ff9a27">Success</h1>
+        <div class="btns">
+          <router-link to="/"><el-button type="primary" >HOME</el-button></router-link>
+        </div>
       </div>
     </div>
   </div>
-</template>
+</template> 
+
+<script>
+import { setToken } from "@/utils/token.js";
+import { register, bindParent } from "@/api/login";
+export default {
+  data() {
+    var validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else {
+        if (this.ruleForm.checkPass !== "") {
+          this.$refs.ruleForm.validateField("checkPass");
+        }
+        callback();
+      }
+    };
+    var validatePass2 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.ruleForm.password) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
+    return {
+      ruleForm: {
+        password: "",
+        checkPass: "",
+        email: "",
+      },
+      invitecode: "",
+      codetip: false,
+      successtip: false,
+      registertip: true,
+      rules: {
+        pass: [{ validator: validatePass, trigger: "blur" }],
+        checkPass: [{ validator: validatePass2, trigger: "blur" }],
+        email: [
+          {
+            required: true,
+            message: "please input email address",
+            trigger: "blur",
+          },
+          {
+            type: "email",
+            message: "please input correct email address",
+            trigger: ["blur", "change"],
+          },
+        ],
+      },
+    };
+  },
+  mounted() {},
+  methods: {
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+    async next() {
+      //绑定邀请码
+      if (this.invitecode == "") {
+        return;
+      }
+      let res = await bindParent(datas);
+      console.log(res);
+      if (res.status == 200 && res.data) { 
+        this.registertip = false;
+        this.codetip = false;
+        this.successtip = true;
+      }
+    },
+    skip() { 
+      this.registertip = false;
+      this.codetip = false;
+      this.successtip = true;
+    },
+    async signup() {
+      let datas = this.ruleForm;
+      let res = await register(datas);
+      if (res.status == 200 && res.data && res.data.data.token) {
+        setToken("bacaToken", res.data.data.token);
+        this.codetip = true;
+        this.registertip = false;
+        this.successtip = false;
+      }
+    },
+  },
+};
+</script>
 
 <style  scoped>
 .loginbody {
-  background-color: #3a67d7;
-  padding: 2em 0;
+  background-color: #3a67d7; 
 }
 .logoimg {
   width: 40%;
@@ -92,12 +205,6 @@
   height: 4em;
 }
 
-span {
-  cursor: pointer;
-}
-span:hover {
-  color: #41b883;
-}
 .login {
   width: 50%;
   padding: 3em;
@@ -118,6 +225,14 @@ span:hover {
   background-color: #3a67d7;
   border-color: #678be9;
 }
+.skipbtn {
+  background-color: #ffffff;
+  color: #3a67d7;
+}
+
+.codetip {
+  margin: 1em auto;
+}
 @media only screen and (max-width: 700px) {
   .login {
     width: 100%;
@@ -137,61 +252,3 @@ span:hover {
   }
 }
 </style>
-
-<script>
-import { setToken } from "@/utils/token.js";
-import { login, register } from "@/api/login";
-export default {
-  data () {
-    return {
-      loginForm: {
-        email: "",
-        password: "",
-      },
-      registerForm: {
-        email: "",
-        password: "",
-        name: "",
-        invitecode: "",
-      },
-
-    };
-  },
-  mounted () {
-  },
-  methods: {
-    resetForm (formName) {
-      this.$refs[formName].resetFields();
-    },
-    async login () {
-      let datas = this.loginForm;
-      let res = await login(datas);
-      console.log(res);
-      if (res.status == 200 && res.data && res.data.data.token) {
-        setToken("bacaToken", res.data.data.token)
-        this.$router.push({ path: "/", query: { id: 1 } });
-      }
-
-    },
-
-    ToRegister () {
-      this.showRegister = true;
-      this.showLogin = false;
-    },
-    ToLogin () {
-      this.showRegister = false;
-      this.showLogin = true;
-    },
-    async register () {
-      let datas = this.registerForm;
-      let res = await register(datas);
-      if (res.status == 200 && res.data && res.data.data.token) {
-        setToken("bacaToken", res.data.data.token)
-        this.tishi = "注册成功";
-        this.showTishi = true;
-        this.$router.push({ path: "/", query: { id: 1 } });
-      }
-    }
-  }
-};
-</script>
