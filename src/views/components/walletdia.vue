@@ -1,21 +1,21 @@
 
 <template>
-  <el-dialog
-    :modal="true"
-    :modal-append-to-body="true"
-    :visible.sync="isShow"
-    width="50%"
-    :close-on-click-modal="false"
-    :show-close="true"
-    :close-on-press-escape="true"
-    center
-  >
+  <el-dialog :modal="true"
+             :modal-append-to-body="true"
+             :visible.sync="isShow"
+             width="50%"
+             :close-on-click-modal="false"
+             :show-close="true"
+             :close-on-press-escape="true"
+             center>
     <h4>
       please connect your Internet Computer wallet first to receive your reward.
     </h4>
-    <span slot="footer" class="dialog-footer">
+    <span slot="footer"
+          class="dialog-footer">
       <el-button @click="isShow = false">取 消</el-button>
-      <el-button type="primary" @click="connectWallet()">确 定</el-button>
+      <el-button type="primary"
+                 @click="connectWallet()">确 定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -45,30 +45,30 @@ export default {
       default: "1000px",
     },
   },
-  data() {
+  data () {
     return {
       icpClient: new IcpAuthClient(),
     };
   },
-  async created() {
+  async created () {
     if (this.icpClient.client == null) {
       await this.icpClient.createClient();
     }
   },
   methods: {
-    async connectWallet() {
+    async connectWallet () {
       await this.icpClient.login();
       this.isShow = false;
-      if (!this.icpClient.principal) {
+      if (this.icpClient.principal !== null) {
         setToken("bacaWallet", this.icpClient.principal);
       }
     },
-    handleClose(done) {
+    handleClose (done) {
       this.$confirm("确认关闭？")
         .then((_) => {
           done();
         })
-        .catch((_) => {});
+        .catch((_) => { });
     },
   },
   components: {},
