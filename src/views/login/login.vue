@@ -1,9 +1,9 @@
 <template>
   <div class="loginbody pd-top-50 pd-bottom-50">
-    <div class="login"> 
+    <div class="login">
       <div class="login-wrap">
         <img src="@/assets/img/logo_3.png"
-             class="logoimg" /> 
+             class="logoimg" />
         <el-form :model="loginForm"
                  status-icon
                  ref="loginForm">
@@ -46,7 +46,6 @@
           <router-link to='/register'><span style="color:rgba(58,103,215,1);">Sign up</span></router-link>
         </div>
 
-        <span v-on:click="ToRegister"> </span>
       </div>
     </div>
   </div>
@@ -55,16 +54,16 @@
 
 <script>
 import { setToken } from "@/utils/token.js";
-import { login  } from "@/api/login";
+import { login } from "@/api/login";
 export default {
   data () {
     return {
       loginForm: {
         email: "",
         password: "",
-      } 
+      }
     };
-  }, 
+  },
   methods: {
     resetForm (formName) {
       this.$refs[formName].resetFields();
@@ -76,15 +75,15 @@ export default {
       if (res.status == 200 && res.data && res.data.data.token) {
         setToken("bacaToken", res.data.data.token)
         this.$router.push({ path: "/", query: { id: 1 } });
-      } 
-    } 
+      }
+    }
   }
 };
 </script>
 
 <style  scoped>
 .loginbody {
-  background-color: #3a67d7; 
+  background-color: #3a67d7;
 }
 .logoimg {
   width: 40%;
