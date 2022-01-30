@@ -1,8 +1,11 @@
 import { getToken } from "@/utils/token.js";
-let myPlugin = {
-
+let myPlugin = { 
     checkLogin() {
+      if (getToken("bacaToken")) {
         return true;
+    } else {
+        return false;
+    } 
     },
     checkWallet() {
         if (getToken("bacaWallet")) {

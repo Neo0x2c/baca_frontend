@@ -69,12 +69,16 @@ export default {
       this.$refs[formName].resetFields();
     },
     async login () {
+      console.log(this.$route.path)
       let datas = this.loginForm;
       let res = await login(datas);
-      console.log(res);
       if (res.status == 200 && res.data && res.data.data.token) {
         setToken("bacaToken", res.data.data.token)
-        this.$router.push({ path: "/", query: { id: 1 } });
+        if (this.$route.path == "/login") {
+          this.$router.push("/");
+        } else {
+          this.$router.go(-2);
+        }
       }
     }
   }

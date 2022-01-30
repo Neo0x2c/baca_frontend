@@ -21,8 +21,7 @@
       <img class="icon_jump"
            v-show="bct_jump_show"
            src="@/assets/img/bct_jump.gif"
-           alt="img"
-           style="width: 2em" />
+           alt="img" />
     </div>
 
     <!-- blog area Start -->
@@ -181,13 +180,15 @@ export default {
     async progress (newVal, oldVal) {
       var that = this;
       if (newVal === 100) {
+        this.bct_jump_show = true;
+
         var mesopt = {
           message: 'To get reward,please wait a memont......'
         };
         Message(mesopt)
         Interval.stop(that);
         let res = await this.authClient.collectReward();
-        if (res.rewardLeft == 0n) {
+        if (res.msg == 'InsufficientPersonalBudget') {
           this.imgurl = "bct_c.png";
           const h = this.$createElement;
           var mes = "there are no rewards left";
@@ -200,16 +201,12 @@ export default {
         } else {
           this.imgurl = "bct_o.gif";
           var that = this
-          setTimeout(function () {
-            that.bct_jump_show = true;
-          }, 1000);
-
           //this.bct_jump_show = true;
           Interval.run(that);
 
           setTimeout(function () {
             that.bct_jump_show = false;
-          }, 3000);
+          }, 1000);
         }
         console.log("reward  res", res);
       }

@@ -12,8 +12,7 @@ export function login1(data) {
 }   
 
 //  登录接口   
-export function login(param) { 
-  console.log("loing",param) 
+export function login(param) {  
   var res = request({  
       url: host + "/api/user/login?email=" + param.email +  "&password="+ param.password,
       method: "get" 

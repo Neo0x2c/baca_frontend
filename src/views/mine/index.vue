@@ -7,10 +7,8 @@
              v-bind:class="{ tabactivate:0==current}">My Votes</div>
         <div @click="tabChange(1,child2)"
              v-bind:class="{ tabactivate:1==current}">My Medal</div> -->
-        <div
-          @click="tabChange(2, child3)"
-          v-bind:class="{ tabactivate: 2 == current }"
-        >
+        <div @click="tabChange(2, child3)"
+             v-bind:class="{ tabactivate: 2 == current }">
           My Earnings
         </div>
       </div>
@@ -23,16 +21,15 @@ import MyHeader from "./myheader";
 // import child1 from "./myvote";
 // import child2 from "./mymedal";
 import child3 from "./myearnings";
-
 export default {
   name: "Mine",
-  async created() {
-    if (this.$checkLogin()) {
-    } else {
+  async created () {
+    console.log(this.$checkLogin())
+    if (!this.$checkLogin()) {
       this.$router.push("/login");
     }
   },
-  data() {
+  data () {
     return {
       current: 0,
       // child1: "child1",
@@ -42,7 +39,7 @@ export default {
     };
   },
   methods: {
-    tabChange(index, tabItem) {
+    tabChange (index, tabItem) {
       this.current = index;
       this.currentView = tabItem;
       var el = event.currentTarget;
@@ -52,7 +49,7 @@ export default {
     // child1,
     // child2,
     child3,
-    MyHeader,
+    MyHeader
   },
 };
 </script>
