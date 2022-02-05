@@ -3,14 +3,13 @@ import Router from 'vue-router'
 import home from '@/views/home/index'
 import category from '@/views/category/index'
 import detail from '@/views/detail/index'
-import mine from '@/views/mine/index' 
+import mine from '@/views/mine/index'
 import wallet from '@/views/mine/mywallet'
 import login from '@/views/login/login'
 import register from '@/views/login/register'
 
 import inviter from '@/views/invite/inviter'
 import invitee from '@/views/invite/invitee'
-//import register from '@/views/login/register' 
 
 Vue.use(Router)
 
@@ -36,7 +35,7 @@ export default new Router({
       name: 'mine',
       component: mine
     },
-    
+
     {
       path: '/wallet',
       name: 'wallet',

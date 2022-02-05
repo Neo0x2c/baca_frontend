@@ -31,7 +31,7 @@
   </div>
 </template>
 <script>
-
+import { userInfo } from "@/api/mine.js";
 import walletdia from "../components/walletdia.vue";
 export default {
   name: "MyHeader",
@@ -46,8 +46,9 @@ export default {
   async created () {
     // let ba = getToken("bacaToken")
     // var mywallet = getToken("bacaWallet")
-    // let userObjTmp = await userInfo();
-    // this.userObj = userObjTmp.data.data;  
+    let userObjTmp = await userInfo();
+    this.userObj = userObjTmp.data.data;
+    console.log("this.userObj:", this.userObj)
     this.userObj = {
       total: 10,
       stake: 3,

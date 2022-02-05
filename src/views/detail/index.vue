@@ -6,13 +6,12 @@
                  :progress="progress"
                  color="#f9a402"
                  empty-color="transparent"
-                 :size="180"
                  :thickness="10"
                  :empty-thickness="1"
-                 lineMode="in 40"
+                 lineMode="in 50"
                  :legend="false"
                  animation="default 1000 100"
-                 fontSize="1rem">
+                 fontSize="1em">
         <img slot="legend-caption"
              height="80px"
              :src="require(`@/assets/img/${imgurl}`)" />
@@ -206,7 +205,7 @@ export default {
 
           setTimeout(function () {
             that.bct_jump_show = false;
-          }, 1000);
+          }, 500);
         }
         console.log("reward  res", res);
       }
@@ -352,7 +351,6 @@ export default {
     }
     window.addEventListener("scroll", this.handleScroll, true);
     window.addEventListener("visibilitychange", this.handleActivate, true);
-    //在页面刷新时将vuex里的信息保存到localStorage里
     window.addEventListener("beforeunload", () => {
       setToken("readingProgress", this.progress);
     });
@@ -399,11 +397,13 @@ export default {
   border-radius: 6px;
   box-shadow: darkgrey 1px 1px 2px 2px;
 }
-
+.ep-content {
+  width: 3em;
+}
 .fixed_div {
   position: fixed;
   z-index: 10;
-  right: 0;
+  right: -2em;
   bottom: 0;
 }
 
@@ -411,8 +411,8 @@ export default {
   width: 3em;
   position: fixed;
   z-index: 15;
-  right: 71px;
-  bottom: 113px;
+  right: 2.5em;
+  bottom: 8em;
 }
 
 .meta .date i {

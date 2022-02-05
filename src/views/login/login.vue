@@ -34,7 +34,6 @@
                       placeholder="Password"
                       autocomplete="off"></el-input>
           </el-form-item>
-          <p>Account will be automatically registered</p>
           <div class="btns">
             <el-button type="primary"
                        @click="login()">Login</el-button>

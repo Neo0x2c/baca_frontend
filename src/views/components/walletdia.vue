@@ -3,7 +3,6 @@
   <el-dialog :modal="true"
              :modal-append-to-body="true"
              :visible.sync="isShow"
-             width="50%"
              :close-on-click-modal="false"
              :show-close="true"
              :close-on-press-escape="true"
@@ -22,11 +21,12 @@
 <script>
 import { setToken } from "@/utils/token.js";
 import { IcpAuthClient } from "@/utils/login_hooks";
+import { Notification } from "element-ui";
 export default {
   props: {
     isShow: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     switchStyle: {
       type: Boolean,
@@ -38,7 +38,7 @@ export default {
     },
     width: {
       type: String,
-      default: "35%",
+      default: "50%",
     },
     height: {
       type: String,
@@ -57,10 +57,20 @@ export default {
   },
   methods: {
     async connectWallet () {
+      var that = this;
       await this.icpClient.login();
       this.isShow = false;
-      if (this.icpClient.principal !== null) {
+      if ((this.icpClient.isAuthenticated) && (this.icpClient.principal !== null)) {
         setToken("bacaWallet", this.icpClient.principal);
+      } else {
+        const h = that.$createElement;
+        var mes = "bind wallet fail";
+        var options = {
+          title: "Aha ~",
+          message: h("i", { style: "color: teal;font-weight:700" }, mes),
+          type: "error",
+        };
+        Notification(options);
       }
     },
     handleClose (done) {
@@ -74,3 +84,11 @@ export default {
   components: {},
 };
 </script> 
+
+<style scoped>
+@media only screen and (max-width: 600px) {
+  /deep/ .el-dialog {
+    width: 90%;
+  }
+}
+</style>

@@ -53,7 +53,7 @@ export default {
   data () {
     return {
       code: "RCVL7M45J",
-      isDiaShow: false,
+      isDiaShow: true,
       isShareShow: true
     };
   },

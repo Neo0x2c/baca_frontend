@@ -49,7 +49,7 @@ export default {
       console.log("result:", result);
       this.earningObjList = result;
     } else {
-      this.isDiaShow = true
+      //this.isDiaShow = true
     }
   },
 

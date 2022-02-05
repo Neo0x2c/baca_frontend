@@ -1,8 +1,13 @@
 // import store from '@/store/index.js'
-// import request from '@/utils/request.js'
-// // const host = "http://ec2-54-178-107-66.ap-northeast-1.compute.amazonaws.com"
+import request from '@/utils/request.js'
+const host = "http://ec2-54-178-107-66.ap-northeast-1.compute.amazonaws.com:9958"
 
-
+export function userInfo () {
+  return request({
+    url: host + "/api_v2/auth/me",
+    method: "get"
+  })
+}
 
 // // 获取stake列表
 // // export function stakeList(params) {
