@@ -46,9 +46,9 @@ export default {
   async created () {
     // let ba = getToken("bacaToken")
     // var mywallet = getToken("bacaWallet")
-    let userObjTmp = await userInfo();
-    this.userObj = userObjTmp.data.data;
-    console.log("this.userObj:", this.userObj)
+    //let userObjTmp = await userInfo();
+    //this.userObj = userObjTmp.data.data;
+    //console.log("this.userObj:", this.userObj)
     this.userObj = {
       total: 10,
       stake: 3,
