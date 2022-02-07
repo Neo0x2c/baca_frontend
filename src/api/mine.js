@@ -1,4 +1,3 @@
-// import store from '@/store/index.js'
 import request from '@/utils/request.js'
 const host = "http://ec2-54-178-107-66.ap-northeast-1.compute.amazonaws.com:9958"
 
@@ -7,6 +6,16 @@ export function userInfo () {
     url: host + "/api_v2/auth/me",
     method: "get"
   })
+}
+
+//  绑定钱包  
+export function bindWallet (data) {
+  var res = request({
+    url: host + "/api_v2/auth/connectwallet",
+    method: "post",
+    data
+  })
+  return res
 }
 
 // // 获取stake列表

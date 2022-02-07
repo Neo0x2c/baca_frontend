@@ -20,6 +20,7 @@
 </template>
 <script>
 import { setToken } from "@/utils/token.js";
+import { bindWallet } from "@/api/mine.js";
 import { IcpAuthClient } from "@/utils/login_hooks";
 import { Notification } from "element-ui";
 export default {
@@ -62,6 +63,11 @@ export default {
       this.isShow = false;
       if ((this.icpClient.isAuthenticated) && (this.icpClient.principal !== null)) {
         setToken("bacaWallet", this.icpClient.principal);
+        //后端绑定钱包
+        let datas = {
+          "principal": this.icpClient.principal
+        }
+        bindWallet(datas);
       } else {
         const h = that.$createElement;
         var mes = "bind wallet fail";

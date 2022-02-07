@@ -5,33 +5,38 @@
     <img src="@/assets/img/mine/headimg.png"
          border="2"
          class="myheadimg" />
-    <div class="myname">{{ userObj.name }}
+    <div class="myname">{{userObj.name }}
       <el-tooltip class="item"
                   effect="dark"
                   content="please connect your Internet Computer wallet first to receive your reward."
                   placement="right-start">
         <img :src="require('@/assets/img/mine/card.png')"
-             style=" width: 1em; margin-left: 1em;"
+             style=" width: 1em; margin-left: 0.1em;"
              @click="bindwallet()" />
       </el-tooltip>
 
     </div>
+
     <div class="bitinfo">
       <div class="parent_nav"
-           style="color: #ffbb00; font-size: 2em; font-weight: 600">
-        <span class="sub_nav_left">BCT$</span><span class="sub_nav_right">{{ userObj.total.toFixed(4) }}</span>
+           style="color: #ffbb00; font-size: 1.5em; font-weight: 600">
+        <span class="sub_nav_left">inviteCode</span><span class="sub_nav_right">{{ userObj.inviteCode}}</span>
       </div>
+      <!--
       <div class="parent_nav">
         <span class="sub_nav_left">Staked</span><span class="sub_nav_right">{{ userObj.stake }}</span>
       </div>
       <div class="parent_nav">
         <span class="sub_nav_left">Available</span><span class="sub_nav_right">{{ userObj.money.toFixed(4) }}</span>
-      </div>
+      </div> 
+      -->
     </div>
+
   </div>
 </template>
 <script>
 import { userInfo } from "@/api/mine.js";
+import { setToken } from "@/utils/token.js";
 import walletdia from "../components/walletdia.vue";
 export default {
   name: "MyHeader",
@@ -46,23 +51,21 @@ export default {
   async created () {
     // let ba = getToken("bacaToken")
     // var mywallet = getToken("bacaWallet")
-    //let userObjTmp = await userInfo();
-    //this.userObj = userObjTmp.data.data;
-    //console.log("this.userObj:", this.userObj)
-    this.userObj = {
-      total: 10,
-      stake: 3,
-      money: 5,
-      name: "test",
-    };
+    let res = await userInfo();
+    if (res.status == 200 && res.data) {
+      this.userObj = res.data.data
+      setToken("inviteCode", this.userObj.inviteCode)
+    }
+    console.log(res)
   },
   methods: {
     bindwallet () {
-      if (!this.$checkWallet()) {
+      this.isDiaShow = true
+      /*if (!this.$checkWallet()) {
         this.isDiaShow = true
       } else {
         console.log("bind wallet seccess")
-      }
+      }*/
     },
   },
 

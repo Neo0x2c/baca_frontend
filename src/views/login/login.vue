@@ -71,8 +71,8 @@ export default {
       console.log(this.$route.path)
       let datas = this.loginForm;
       let res = await login(datas);
-      if (res.status == 200 && res.data && res.data.data.token) {
-        setToken("bacaToken", res.data.data.token)
+      if (res.status == 200 && res.data && res.data.code == 200 && res.data.token) {
+        setToken("bacaToken", res.data.token)
         if (this.$route.path == "/login") {
           this.$router.push("/");
         } else {

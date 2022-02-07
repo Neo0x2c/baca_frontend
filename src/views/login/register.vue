@@ -1,78 +1,78 @@
 <template>
   <div class="loginbody pd-top-50 pd-bottom-50">
     <!--input email and pass-->
-    <div class="login" v-show="registertip">
+    <div class="login"
+         v-show="registertip">
       <div class="login-wrap">
-        <img src="@/assets/img/logo_3.png" class="logoimg" />
-        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm">
+        <img src="@/assets/img/logo_3.png"
+             class="logoimg" />
+        <el-form :model="ruleForm"
+                 status-icon
+                 :rules="rules"
+                 ref="ruleForm">
           <el-form-item prop="email">
-            <el-input
-              v-model.number="ruleForm.email"
-              class="forminput"
-              placeholder="Email Address"
-            ></el-input>
+            <el-input v-model.number="ruleForm.email"
+                      class="forminput"
+                      placeholder="Email Address"></el-input>
           </el-form-item>
           <el-form-item prop="pass">
-            <el-input
-              type="password"
-              v-model="ruleForm.password"
-              autocomplete="off"
-              placeholder="Password"
-            ></el-input>
+            <el-input type="password"
+                      v-model="ruleForm.password"
+                      autocomplete="off"
+                      placeholder="Password"></el-input>
           </el-form-item>
           <el-form-item prop="checkPass">
-            <el-input
-              type="password"
-              v-model="ruleForm.checkPass"
-              autocomplete="off"
-              placeholder="Confirm Password"
-            ></el-input>
+            <el-input type="password"
+                      v-model="ruleForm.checkPass"
+                      autocomplete="off"
+                      placeholder="Confirm Password"></el-input>
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click="signup()">Sign up</el-button>
+            <el-button type="primary"
+                       @click="signup()">Sign up</el-button>
           </el-form-item>
         </el-form>
 
         <div class="toRegister">
           <span>Already a member？</span>
-          <router-link to="/login"
-            ><span style="color: rgba(58, 103, 215, 1)"
-              >Login in</span
-            ></router-link
-          >
+          <router-link to="/login"><span style="color: rgba(58, 103, 215, 1)">Login in</span></router-link>
         </div>
       </div>
     </div>
 
     <!-- input invite code-->
-    <div class="login" v-show="codetip">
+    <div class="login"
+         v-show="codetip">
       <div class="login-wrap">
         <h1 style="color: #3a67d7">Have a code?</h1>
-        <el-input
-          v-model="invitecode"
-          class="forminput"
-          placeholder="CODE"
-        ></el-input>
+        <el-input v-model="invitecode"
+                  class="forminput"
+                  placeholder="CODE"></el-input>
         <p class="codetip">
           If you have a promo code or referral code from a friend, enter it
           here.
         </p>
 
         <div class="btns">
-          <el-button type="primary" @click="next()">Continue</el-button>
+          <el-button type="primary"
+                     @click="next()">Continue</el-button>
         </div>
-        <el-button class="skipbtn" @click="skip()">Skip</el-button>
+        <el-button class="skipbtn"
+                   @click="skip()">Skip</el-button>
       </div>
     </div>
 
     <!-- success-->
-    <div class="login" v-show="successtip">
+    <div class="login"
+         v-show="successtip">
       <div class="login-wrap">
         <img src="@/assets/img/login/done.png" />
         <h1 style="color: #ff9a27">Success</h1>
         <div class="btns">
-          <router-link to="/"><el-button type="primary" >HOME</el-button></router-link>
+          <router-link to="/">
+            <el-button type="primary">HOME</el-button>
+          </router-link>
         </div>
       </div>
     </div>
@@ -81,9 +81,10 @@
 
 <script>
 import { setToken } from "@/utils/token.js";
+import { createHash } from "@/utils/common_tools.js";
 import { register, bindParent } from "@/api/login";
 export default {
-  data() {
+  data () {
     var validatePass = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入密码"));
@@ -131,34 +132,36 @@ export default {
       },
     };
   },
-  mounted() {},
+  mounted () { },
   methods: {
-    resetForm(formName) {
+    resetForm (formName) {
       this.$refs[formName].resetFields();
     },
-    async next() {
+    async next () {
       //绑定邀请码
       if (this.invitecode == "") {
         return;
       }
       let res = await bindParent(datas);
       console.log(res);
-      if (res.status == 200 && res.data) { 
+      if (res.status == 200 && res.data) {
         this.registertip = false;
         this.codetip = false;
         this.successtip = true;
       }
     },
-    skip() { 
+    skip () {
       this.registertip = false;
       this.codetip = false;
       this.successtip = true;
     },
-    async signup() {
+    async signup () {
       let datas = this.ruleForm;
+      datas["name"] = "baca_" + createHash(8)
+      console.log("*" * 10, datas)
       let res = await register(datas);
-      if (res.status == 200 && res.data && res.data.data.token) {
-        setToken("bacaToken", res.data.data.token);
+      if (res.status == 200 && res.data && res.data.code == 200 && res.data.token) {
+        setToken("bacaToken", res.data.token);
         this.codetip = true;
         this.registertip = false;
         this.successtip = false;
@@ -170,7 +173,7 @@ export default {
 
 <style  scoped>
 .loginbody {
-  background-color: #3a67d7; 
+  background-color: #3a67d7;
 }
 .logoimg {
   width: 40%;
