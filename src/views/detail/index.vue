@@ -180,6 +180,9 @@ export default {
       var that = this;
       if (newVal === 100) {
         this.bct_jump_show = true;
+        setTimeout(function () {
+          that.bct_jump_show = false;
+        }, 1000);
 
         var mesopt = {
           message: 'To get reward,please wait a memont......'
@@ -199,15 +202,9 @@ export default {
           Notification(options);
         } else {
           this.imgurl = "bct_o.gif";
-          var that = this
-          //this.bct_jump_show = true;
-          Interval.run(that);
-
-          setTimeout(function () {
-            that.bct_jump_show = false;
-          }, 500);
+          Interval.run(this);
         }
-        console.log("reward  res", res);
+
       }
     },
   },

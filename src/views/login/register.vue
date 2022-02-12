@@ -80,6 +80,7 @@
 </template> 
 
 <script>
+import { Notification } from "element-ui";
 import { setToken } from "@/utils/token.js";
 import { createHash } from "@/utils/common_tools.js";
 import { register, bindParent } from "@/api/login";
@@ -132,17 +133,21 @@ export default {
       },
     };
   },
-  mounted () { },
+  created () {
+    this.invitecode = this.$route.params.invitecode
+  },
+
   methods: {
     resetForm (formName) {
       this.$refs[formName].resetFields();
     },
+
     async next () {
       //绑定邀请码
       if (this.invitecode == "") {
         return;
       }
-      let res = await bindParent(datas);
+      let res = await bindParent({ "invite_code": this.invitecode });
       console.log(res);
       if (res.status == 200 && res.data) {
         this.registertip = false;
@@ -158,13 +163,21 @@ export default {
     async signup () {
       let datas = this.ruleForm;
       datas["name"] = "baca_" + createHash(8)
-      console.log("*" * 10, datas)
       let res = await register(datas);
       if (res.status == 200 && res.data && res.data.code == 200 && res.data.token) {
         setToken("bacaToken", res.data.token);
         this.codetip = true;
         this.registertip = false;
         this.successtip = false;
+      } else {
+        const h = this.$createElement;
+        var mes = res.data.message;
+        var options = {
+          title: "Aha ~",
+          message: h("i", { style: "color: teal;font-weight:700" }, mes),
+          duration: 2000
+        };
+        Notification(options);
       }
     },
   },

@@ -13,7 +13,7 @@
       </h5>
       <div v-show="isShareShow">
         <h5><span>Code: </span><span class="font_blue">{{code}}</span></h5>
-        <h5> <span>Link: </span><span>http://www.baca.com/ref/{{code}}</span></h5>
+        <h5> <span>Link: </span><span>http://baca.bacamedium.com/#/register/{{code}}</span></h5>
         <el-button type="primary"
                    class="share">Share your link</el-button>
         <div class="flex">
@@ -47,18 +47,18 @@
   </div>
 </template> 
 <script>
+import { userInfo } from "@/api/mine.js";
 import walletdia from "../components/walletdia.vue";
 export default {
   components: { walletdia },
   data () {
     return {
-      code: "RCVL7M45J",
-      isDiaShow: true,
-      isShareShow: true
+      code: "",
+      isDiaShow: false,
+      isShareShow: false
     };
   },
-  created () {
-    //获取邀请码
+  async created () {
     //if login 
     if (!this.$checkLogin()) {
       this.$router.push("/login");
@@ -66,6 +66,16 @@ export default {
     if (!this.$checkWallet()) {
       this.isShareShow = false
       this.isDiaShow = true
+    }
+    let res = await userInfo();
+    console.log(res)
+    if (res.status == 200 && res.data) {
+      this.userObj = res.data.data
+      this.code = this.userObj.inviteCode
+      this.isShareShow = true
+      this.isDiaShow = false
+    } else {
+      this.$router.push("/login");
     }
   },
   methods: {},

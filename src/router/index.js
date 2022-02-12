@@ -52,6 +52,11 @@ export default new Router({
       component: register
     },
     {
+      path: '/register/:invitecode',
+      name: 'register',
+      component: register
+    },
+    {
       path: '/inviter',
       name: 'inviter',
       component: inviter

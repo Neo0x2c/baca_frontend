@@ -68,7 +68,6 @@ export default {
       this.$refs[formName].resetFields();
     },
     async login () {
-      console.log(this.$route.path)
       let datas = this.loginForm;
       let res = await login(datas);
       if (res.status == 200 && res.data && res.data.code == 200 && res.data.token) {
@@ -78,6 +77,8 @@ export default {
         } else {
           this.$router.go(-2);
         }
+      } else {
+        console.log("login fail")
       }
     }
   }

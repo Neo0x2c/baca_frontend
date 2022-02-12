@@ -26,7 +26,7 @@ export function register (data) {
 export function bindParent (data) {
   console.log(data)
   var res = request({
-    url: host + "api/user/bindParent",
+    url: host + "/api_v2/auth/addinvite",
     method: "post",
     data
   })
