@@ -139,6 +139,7 @@
 </template>
 <script>
 import { articleDetail, articleLike, articleDisLike } from "@/api/article.js";
+import { getReward } from "@/api/mine.js";
 import { Notification } from "element-ui";
 import { Message } from 'element-ui';
 import VueSlider from "vue-slider-component";
@@ -189,7 +190,9 @@ export default {
         };
         Message(mesopt)
         Interval.stop(that);
-        let res = await this.authClient.collectReward();
+        //let res = await this.authClient.collectReward();
+        let res = await getReward();
+        console.log(res)
         if (res.msg == 'InsufficientPersonalBudget') {
           this.imgurl = "bct_c.png";
           const h = this.$createElement;

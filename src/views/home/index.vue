@@ -19,20 +19,26 @@
                v-for="item in toparticles">
             <div class="single-post-wrap">
               <div class="thumb">
-                <img :src=item.coverImg
-                     alt="img">
+                <img :src="item.coverImg"
+                     alt="img" />
                 <a class="tag top-right tag-sky top_title"
-                   href="#">{{item.cate.title}}</a>
+                   href="#">{{
+                  item.cate.title
+                }}</a>
               </div>
               <div class="post-details">
                 <div class="meta">
                   <div class="date">
                     <i class="fa fa-clock-o"></i>
-                    {{item.createdAt}}
+                    {{ item.createdAt }}
                   </div>
                 </div>
-                <h6 class="top_title"><a :href="'#/detail/' + item.id "
-                     target="_blank">{{item.title}}</a></h6>
+                <h6 class="top_title">
+                  <a :href="'#/detail/' + item.id"
+                     target="_blank">{{
+                    item.title
+                  }}</a>
+                </h6>
               </div>
             </div>
           </div>
@@ -40,10 +46,9 @@
       </div>
     </div>
     <!-- news-area Start -->
+
     <div class="pd-top-50 pd-bottom-30"
-         id="articlesFeed"
-         v-loading="loading"
-         element-loading-text="loading">
+         id="articlesFeed">
       <div class="container">
         <div class="row">
           <div class="col-lg-8">
@@ -51,41 +56,52 @@
               <h4 class="title">Stories</h4>
               <span class="line"></span>
             </div>
-            <div class="media-post-wrap-2 media"
-                 v-for="item in articles">
-              <div class="thumb"
-                   style="width: 20em;align-self: center;justify-content: center;">
-                <img :src=item.coverImg
-                     alt="img">
-              </div>
-              <div class="media-body"
-                   style="margin-top:2px">
-                <div class="meta d-block mt-3">
-                  <div class="date">
-                    <i class="fa fa-clock-o"></i>
-                    {{item.createdAt}}
-                    <i class="fa author"></i>
-                    {{item.author}}
+            <div v-infinite-scroll="loadMore"
+                 infinite-scroll-disabled="loading"
+                 infinite-scroll-distance="10"
+                 class="list">
+              <div class="media-post-wrap-2 media"
+                   v-for="item in articles">
+                <div class="thumb"
+                     style="
+                    width: 20em;
+                    align-self: center;
+                    justify-content: center;
+                  ">
+                  <img :src="item.coverImg"
+                       alt="img" />
+                </div>
+                <div class="media-body"
+                     style="margin-top: 2px">
+                  <div class="meta d-block mt-3">
+                    <div class="date">
+                      <i class="fa fa-clock-o"></i>
+                      {{ item.createdAt }}
+                      <i class="fa author"></i>
+                      {{ item.author }}
+                    </div>
+                  </div>
+                  <a :href="'#/detail/' + item.id"
+                     target="_blank">
+                    <h6 class="story_title">{{ item.title }}</h6>
+                    <p v-html="item.content"
+                       class="story_content"></p>
+                  </a>
+                  <div class="news_botton">
+                    <a class="tag tag-red"
+                       href="#">{{ item.cate.title }}</a>
+                    <div>
+                      <img src="@/assets/img/vote.png"
+                           alt="img"
+                           style="width: 1.5em" />
+                      {{ item.vote }}
+                    </div>
                   </div>
                 </div>
-                <a :href="'#/detail/' + item.id "
-                   target="_blank">
-                  <h6 class="story_title">{{item.title}}</h6>
-                  <p v-html="item.content"
-                     class="story_content"></p>
-                </a>
-                <div class="news_botton">
-                  <a class="tag tag-red"
-                     href="#">{{item.cate.title}}</a>
-                  <div> <img src="@/assets/img/vote.png"
-                         alt="img"
-                         style="width:1.5em;" /> {{item.vote}}</div>
-                </div>
               </div>
-            </div>
-            <div class="btn-wrap mt-5 mb-5 text-center">
-              <a class="btn btn-main"
-                 @click="showMore">Load More</a>
+              <div class="btn-wrap mt-5 mb-5 text-center">
+                <a class="btn btn-main">{{ loadMsg }}</a>
+              </div>
             </div>
           </div>
           <div class="col-lg-4">
@@ -95,77 +111,87 @@
             </div>
             <ul class="widget widget-categories">
               <li v-for="item in cateObjList">
-                <div class="thumb"><img :src=item.memo.img
-                       alt="img"></div>
-                <a :href="'#/category/' + item.id "
-                   target="_blank">{{item.title}}</a>
+                <div class="thumb"><img :src="item.memo.img"
+                       alt="img" /></div>
+                <a :href="'#/category/' + item.id"
+                   target="_blank">{{
+                  item.title
+                }}</a>
               </li>
             </ul>
           </div>
         </div>
       </div>
     </div>
+
     <!-- news-area End -->
   </div>
 </template>
 <script>
+import { Spinner, InfiniteScroll, Toast } from "mint-ui";
 import { cateList, articleList, articleTopVoteList } from "@/api/article.js";
-import { Notification } from 'element-ui';
-import Header from "../header/header"
-import Footer from "../footer/footer"
+import Header from "../header/header";
+import Footer from "../footer/footer";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
     Header,
-    Footer
+    Footer,
+    Spinner,
+    InfiniteScroll,
+    Toast,
   },
   async created () {
-    // 页面一打开就去加载列表。
     let cateRes = await cateList();
     this.cateObjList = cateRes.data.data;
-    let articleRes = await articleTopVoteList({ "page": 1 });
-    this.toparticles = articleRes.data.data.slice(0, 4)
-    let articleRes2 = await articleList({ "page": 1 });
-    this.articles = articleRes2.data.data
-    this.loading = false
+    let articleRes = await articleTopVoteList({ page: 1 });
+    this.toparticles = articleRes.data.data.slice(0, 4);
+    let articleRes2 = await articleList({ page: 1 });
+    //this.articles = articleRes2.data.data; 
   },
   data () {
     return {
-      toparticles: {},
-      articles: {},
+      toparticles: [],
+      articles: [],
       cateObjList: [],
+      loading: false,
       page: 1,
-      loading: false
+      loadMsg: "Load More",
+    };
+  },
+
+  methods: {
+    loadMore () {
+      this.requestData();
+    },
+    async requestData () {
+      try {
+        console.log("load more", this.page);
+        this.loading = true;
+        let articleRes2 = await articleList({ page: this.page });
+        if (articleRes2.data && articleRes2.data.code == 0) {
+          let tmp = articleRes2.data.data;
+          this.articles = this.articles.concat(articleRes2.data.data);
+          this.page += 1;
+          if (this.page == 2) {
+            this.page += 1;
+          }
+          if (tmp.length < 10) {
+            this.loading = true;
+            this.loadMsg = "No Articles";
+          } else {
+            this.loading = false;
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+      }
     }
   },
-  methods: {
-    async showMore () {
-      this.loading = true
-      let articleRes2 = await articleList({ "page": this.page + 1 });
-      let res = articleRes2.data.data
-      this.loading = false
-      if (res.length < 1) {
-        const h = this.$createElement;
-        var mes = "There are no more articles"
-        var options = {
-          title: 'Aha ~',
-          message: h('i', { style: 'color: teal;font-weight:700' }, mes)
-
-        }
-        Notification(options)
-        return
-      }
-      this.articles = res
-      var anchor = this.$el.querySelector('#articlesFeed'); //获取元素  
-      document.getElementById("articlesFeed").scrollIntoView();
-      this.page += 1
-    }
-  }
-
-}
-</script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+};
+</script> 
 <style scoped>
 .top_title {
   max-height: 3em;
@@ -209,5 +235,95 @@ export default {
   .news_botton a {
     float: left;
   }
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+@-webkit-keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  50% {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  50% {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.ball-clip-rotate > div {
+  border-radius: 100%;
+  border: 2px solid #333;
+  border-bottom-color: transparent;
+  height: 20px;
+  width: 20px;
+  background: 0 0 !important;
+  display: inline-block;
+  -webkit-animation: rotate 0.75s 0s linear infinite;
+  animation: rotate 0.75s 0s linear infinite;
+}
+</style>
+<style module>
+.box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+.item {
+  display: flex;
+  box-shadow: 0 0 4px #999 inset;
+  height: 50px;
+  line-height: 50px;
+  padding: 10px;
+}
+.super-item {
+  box-shadow: 0 0 10px red inset;
+}
+.item img {
+  width: 50px;
+  height: 50px;
+}
+.item h3 {
+  font-size: 20px;
+  margin-left: 20px;
+}
+.pull-down-dom {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  right: 0;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.load-more-dom {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 </style>

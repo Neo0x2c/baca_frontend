@@ -1,6 +1,6 @@
 import request from '@/utils/request.js'
 const host = "http://ec2-54-178-107-66.ap-northeast-1.compute.amazonaws.com:9958"
-
+const PERPAGE = 10
 
 // 1，获取频道列表
 export function cateList () {
@@ -24,7 +24,7 @@ export function articleTopVoteList (params) {
 
 
   return request({
-    url: host + "/api_v2/article/topVote?" + parmstmp,
+    url: host + "/api_v2/article/topVote?" + parmstmp + "&perPage=" + PERPAGE,
     method: "get"
   })
 }
@@ -42,7 +42,7 @@ export function articleList (params) {
     parmstmp = parmstmp + '&cid=' + params.cid
 
   return request({
-    url: host + "/api_v2/article/list?" + parmstmp,
+    url: host + "/api_v2/article/list?" + parmstmp + "&perPage=" + PERPAGE,
     method: "get"
   })
 }

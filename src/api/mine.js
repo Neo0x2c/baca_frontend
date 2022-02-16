@@ -18,6 +18,14 @@ export function bindWallet (data) {
   return res
 }
 
+//获取奖励
+export function getReward () {
+  var res = request({
+    url: host + "/api_v2/auth/get_reward",
+    method: "post"
+  })
+  return res
+}
 // // 获取stake列表
 // // export function stakeList(params) {
 // //     return request({

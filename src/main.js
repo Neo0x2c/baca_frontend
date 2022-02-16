@@ -25,6 +25,11 @@ Vue.use(Input)
 Vue.use(Loading)
 Vue.use(Tooltip);
 
+import { Spinner, InfiniteScroll, Toast } from 'mint-ui';
+Vue.use(Spinner);
+Vue.use(InfiniteScroll);
+Vue.use(Toast);
+
 // 导入判断用户是否登录插件
 import myPlugin from '@/utils/myPlugin.js'
 Vue.use(myPlugin)
